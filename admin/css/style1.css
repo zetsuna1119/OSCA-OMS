@@ -1,0 +1,47 @@
+h10 {
+  position: relative;
+  font-size: 30px;
+  margin-top: 30px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: #ffffff;
+}
+.tunga {
+  position: auto;
+  text-align: center;
+  top: 10px;
+  left: 300px;
+}
+.pic {
+  position: auto;
+  top: 0%;
+  left: 300%;
+}
+h11 {
+  position: relative;
+  font-size: 30px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: #ffffff;
+}
+h12 {
+  position: relative;
+  font-size: 20px;
+  text-align: right;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: #ffffff;
+}
+h13 {
+  position: absolute;
+  font-size: 20px;
+  text-align: right;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: #ffffff;
+  margin-top: 50px;
+  margin-left: 10px;
+}
+img {
+  border-radius: 50%;
+  width: 15%;
+  height: 10%;
+  margin-top: 25px;
+  
+}
