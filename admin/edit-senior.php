@@ -332,15 +332,15 @@ p {
 						</tr>
 						<tr>
 							<td style="width:30%">Sur Name:</td>
-							<td><input required class="form-control" style="text-transform: uppercase" type="text" name="stuname" style="width:100%;" placeholder="Enter Sur Name" value="<?=$stuname?>"></td>
+							<td><input  pattern="[^\d]*" required class="form-control" style="text-transform: uppercase" type="text" name="stuname" style="width:100%;" placeholder="Enter Sur Name" value="<?=$stuname?>"></td>
 						</tr>
 						<tr>
 							<td style="width:30%">First Name:</td>
-							<td><input required class="form-control" style="text-transform: uppercase" type="text" name="fname" style="width:100%;" placeholder="Enter First Name" value="<?=$fname?>"></td>
+							<td><input  pattern="[^\d]*" required class="form-control" style="text-transform: uppercase" type="text" name="fname" style="width:100%;" placeholder="Enter First Name" value="<?=$fname?>"></td>
 						</tr>
 						<tr>
 							<td style="width:30%">Middle Name:</td>
-							<td><input required class="form-control" style="text-transform: uppercase" type="text" name="mname" style="width:100%;" placeholder="Enter Middle Name" value="<?=$mname?>"></td>
+							<td><input  pattern="[^\d]*" required class="form-control" style="text-transform: uppercase" type="text" name="mname" style="width:100%;" placeholder="Enter Middle Name" value="<?=$mname?>"></td>
 						</tr>
 						<tr>
 							<td style="width:30%">Date of Birth:</td>
@@ -361,11 +361,11 @@ p {
 						</tr>
 						<tr>
 							<td style="width:30%">Religion:</td>
-							<td><input style="text-transform: uppercase" type="text" name="religion" value="<?=$religion?>" class="form-control" placeholder="Enter your Religion" required='true'></td>
+							<td><input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="religion" value="<?=$religion?>" class="form-control" placeholder="Enter your Religion" required='true'></td>
 						</tr>
 						<tr>
 							<td style="width:30%">Place of Birth:</td>
-							<td><input style="text-transform: uppercase" type="text" name="pob" value="<?=$pob?>" class="form-control" placeholder="Enter your Place of Birth" required='true'></td>
+							<td><input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="pob" value="<?=$pob?>" class="form-control" placeholder="Enter your Place of Birth" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Contact Number:</td>
@@ -420,20 +420,40 @@ p {
 						</tr>
 						<tr>
 						<td style="width:30%">Educational Attainment:</td>
-							<td><input style="text-transform: uppercase" type="text" name="eduat" value="<?=$eduat?>" class="form-control" placeholder="Enter your Educational Attainment" required='true'></td>
+							<td><input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="eduat" value="<?=$eduat?>" class="form-control" placeholder="Enter your Educational Attainment" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Skills:</td>
-							<td> <input style="text-transform: uppercase" type="text" name="skills" value="<?=$skills?>" class="form-control" placeholder="Enter your Skills" required='true'></td>
+							<td> <input  pattern="[^\d]*" style="text-transform: uppercase" type="text" name="skills" value="<?=$skills?>" class="form-control" placeholder="Enter your Skills" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Occupation:</td>
-							<td><input style="text-transform: uppercase" type="text" name="occu" value="<?=$occu?>" class="form-control" required='true'></td>
+							<td><input  pattern="[^\d]*" style="text-transform: uppercase" type="text" name="occu" value="<?=$occu?>" class="form-control" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Annual Income:</td>
-							<td> <input type="text" name="anincome" value="<?=$anincome?>" class="form-control" placeholder="Enter your Annual Income" required='true' maxlength="20" pattern="[0-9]+"></td>
-						</tr>
+						<td><input id="anincome" type="text" name="anincome" value="<?=$anincome?>" class="form-control" placeholder="Enter your Annual Income" required='true' maxlength="20"></td>
+						</tr>								
+<script>
+  // Get the input element
+  var input = document.getElementById("anincome");
+
+  // Add event listener to the input element
+  input.addEventListener("input", function() {
+    // Get the input value
+    var value = this.value;
+
+    // Remove all non-numeric characters
+    value = value.replace(/[^0-9]/g, "");
+
+    // Format the value with commas and periods
+    var formattedValue = "₱" + value.replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+    formattedValue = formattedValue.replace(/(\d)(?=(\d{2})+\d$)/g, "$1.");
+
+    // Set the formatted value back to the input element
+    this.value = formattedValue;
+  });
+</script>
 						<tr>
 						<td style="width:30%">With Pension?:</td>
 							<td><select style="text-transform: uppercase" name="pension" value="" class="form-control" required='true'>
@@ -444,18 +464,18 @@ p {
 						</tr>
 						<tr>
 						<td style="width:30%">Name of Benefactor, if any:</td>
-							<td> <input style="text-transform: uppercase" type="text" name="nob" value="<?=$nob?>" class="form-control" placeholder="Enter the name of your benefactor" required='true'></td>
+							<td> <input  pattern="[^\d]*" style="text-transform: uppercase" type="text" name="nob" value="<?=$nob?>" class="form-control" placeholder="Enter the name of your benefactor" required='true'></td>
 						</tr>
 						<div>
 							<td style="font-weight: bold;"><h5>Family Composition</h5></td>
 							</div>
 					<tr>
 					  <td style="width:30%">Name:</td>
-							<td><input style="text-transform: uppercase" type="text" name="fcname" value="<?=$fcname?>" class="form-control" placeholder="Enter Name of Benefactor" required='true'></td>
+							<td><input  pattern="[^\d]*" style="text-transform: uppercase" type="text" name="fcname" value="<?=$fcname?>" class="form-control" placeholder="Enter Name of Benefactor" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Relationship:</td>
-							<td> <input style="text-transform: uppercase" type="text" name="fcrelationship" value="<?=$fcrelationship?>" class="form-control" placeholder="Enter your Relationship" required='true'></td>
+							<td> <input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="fcrelationship" value="<?=$fcrelationship?>" class="form-control" placeholder="Enter your Relationship" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Age:</td>
@@ -474,12 +494,32 @@ p {
 						</tr>
 						<tr>
 					  <td style="width:30%">Occupation:</td>
-							<td><input style="text-transform: uppercase" type="text" name="fcoccu" value="<?=$fcoccu?>" class="form-control" placeholder="Enter Occupation" required='true'></td>
+							<td><input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="fcoccu" value="<?=$fcoccu?>" class="form-control" placeholder="Enter Occupation" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Income:</td>
-							<td>  <input type="text" name="fcincome" value="<?=$fcincome?>" class="form-control" placeholder="Enter Income" required='true' maxlength="20" pattern="[0-9]+"></td>
+						<td><input  id="anincome2" type="text" name="fcincome" value="<?=$fcincome?>" class="form-control" placeholder="Enter Income" required='true' maxlength="20"></td>
 						</tr>
+						<script>
+  // Get the input element
+  var input = document.getElementById("anincome2");
+
+  // Add event listener to the input element
+  input.addEventListener("input", function() {
+    // Get the input value
+    var value = this.value;
+
+    // Remove all non-numeric characters
+    value = value.replace(/[^0-9]/g, "");
+
+    // Format the value with commas and periods
+    var formattedValue = "₱" + value.replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+    formattedValue = formattedValue.replace(/(\d)(?=(\d{2})+\d$)/g, "$1.");
+
+    // Set the formatted value back to the input element
+    this.value = formattedValue;
+  });
+</script>
 						<tr>
 						<td style="width:30%">Contact Number:</td>
 							<td> <input type="text" name="altconnum" value="<?=$altconnum?>" class="form-control" placeholder="Enter Contact Number" required='true' maxlength="11" pattern="[0-9]+"></td>

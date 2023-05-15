@@ -202,20 +202,20 @@ h14 {
 					<form method="post" enctype="multipart/form-data">
 						<table width="60%" cellpadding="5" cellspacing="5" align="center">
 						<tr>
-							<td style="width:30%">Sur Name:</td>
-							<td><input style="text-transform: uppercase" required type="text" class="form-control" name="stuname" style="width:100%;" placeholder="Enter your SurName"></td>
+							<td style="width:30%">SurName:</td>
+							<td><input pattern="[^\d]*" title="Please enter letters only" style="text-transform: uppercase" required type="text" class="form-control" name="stuname" style="width:100%;" placeholder="Enter your SurName"></td>
 						</tr>
 						<tr>
 							<td style="width:30%">First Name:</td>
-							<td><input style="text-transform: uppercase" required type="text" class="form-control" name="fname" style="width:100%;" placeholder="Enter First Name"></td>
+							<td><input pattern="[^\d]*" title="Please enter letters only" style="text-transform: uppercase" required type="text" class="form-control" name="fname" style="width:100%;" placeholder="Enter First Name"></td>
 						</tr>
 						<tr>
 							<td style="width:30%">Middle Name:</td>
-							<td><input style="text-transform: uppercase" required type="text" class="form-control" name="mname" style="width:100%;" placeholder="Enter Middle Name"></td>
+							<td><input pattern="[^\d]*" title="Please enter letters only" style="text-transform: uppercase" required type="text" class="form-control" name="mname" style="width:100%;" placeholder="Enter Middle Name"></td>
 						</tr>
 						<tr>
 							<td style="width:30%">Nick Name:</td>
-							<td><input style="text-transform: uppercase" required type="text" class="form-control" name="nname" style="width:100%;" placeholder="Enter Nick Name"></td>
+							<td><input pattern="[^\d]*" title="Please enter letters only" style="text-transform: uppercase" required type="text" class="form-control" name="nname" style="width:100%;" placeholder="Enter Nick Name"></td>
 						</tr>
 						<tr>
 							<td style="width:30%">Date of Birth:</td>
@@ -238,11 +238,11 @@ h14 {
 						</tr>
 						<tr>
 							<td style="width:30%">Religion:</td>
-							<td><input style="text-transform: uppercase" type="text" name="religion" value="" class="form-control" placeholder="Enter your Religion" required='true'></td>
+							<td><input pattern="[^\d]*" title="Please enter letters only" style="text-transform: uppercase" type="text" name="religion" value="" class="form-control" placeholder="Enter your Religion" required='true'></td>
 						</tr>
 						<tr>
 							<td style="width:30%">Place of Birth:</td>
-							<td><input style="text-transform: uppercase" type="text" name="pob" value="" class="form-control" placeholder="Enter your Place of Birth" required='true'></td>
+							<td><input pattern="[^\d]*" title="Please enter letters only" style="text-transform: uppercase" type="text" name="pob" value="" class="form-control" placeholder="Enter your Place of Birth" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Contact Number:</td>
@@ -265,7 +265,7 @@ h14 {
 						</tr>
 						<tr>
 						<td style="width:30%">Purok Adress:</td>
-							<td> <input style="text-transform: uppercase" type="text" name="paddress" value="" class="form-control" placeholder="Enter your Purok Address" required='true'></td>
+							<td><input style="text-transform: uppercase" type="text" name="paddress" value="" class="form-control" placeholder="Enter your Purok Address" required='true'></td>
 						</tr>
 						<tr>
 							<td style="width:30%">Barangay</td>
@@ -299,20 +299,42 @@ h14 {
 						</tr>
 						<tr>
 						<td style="width:30%">Educational Attainment:</td>
-							<td><input style="text-transform: uppercase" type="text" name="eduat" value="" class="form-control" placeholder="Enter your Educational Attainment" required='true'></td>
+							<td><input pattern="[^\d]*" title="Please enter letters only" style="text-transform: uppercase" type="text" name="eduat" value="" class="form-control" placeholder="Enter your Educational Attainment" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Skills:</td>
-							<td> <input style="text-transform: uppercase" type="text" name="skills" value="" class="form-control" placeholder="Enter your Skills" required='true'></td>
+							<td> <input pattern="[^\d]*" title="Please enter letters only" style="text-transform: uppercase" type="text" name="skills" value="" class="form-control" placeholder="Enter your Skills" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Occupation:</td>
-							<td><input style="text-transform: uppercase" placeholder="Enter your Occupation" type="text" name="occu" value="" class="form-control" required='true'></td>
+							<td><input pattern="[^\d]*" title="Please enter letters only" style="text-transform: uppercase" placeholder="Enter your Occupation" type="text" name="occu" value="" class="form-control" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Annual Income:</td>
-							<td> <input style="text-transform: uppercase" type="text" name="anincome" value="" class="form-control" placeholder="Enter your Annual Income" required='true' maxlength="20" pattern="[0-9]+"></td>
+							<td><input id="anincome" style="text-transform: uppercase" type="text" name="anincome" value="" class="form-control" placeholder="Enter your Annual Income" required='true' maxlength="20"></td>
 						</tr>
+					
+<script>
+  // Get the input element
+  var input = document.getElementById("anincome");
+
+  // Add event listener to the input element
+  input.addEventListener("input", function() {
+    // Get the input value
+    var value = this.value;
+
+    // Remove all non-numeric characters
+    value = value.replace(/[^0-9]/g, "");
+
+    // Format the value with commas and periods
+    var formattedValue = "₱" + value.replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+    formattedValue = formattedValue.replace(/(\d)(?=(\d{2})+\d$)/g, "$1.");
+
+    // Set the formatted value back to the input element
+    this.value = formattedValue;
+  });
+</script>
+
 						<tr>
 						<td style="width:30%">With Pension?:</td>
 					<td>
@@ -325,18 +347,18 @@ h14 {
 						</tr>
 						<tr>
 						<td style="width:30%">Name of Benefactor, if any:</td>
-							<td> <input style="text-transform: uppercase" type="text" name="nob" value="" class="form-control" placeholder="Enter the name of your benefactor" required='true'></td>
+							<td> <input pattern="[^\d]*" title="Please enter letters only" style="text-transform: uppercase" type="text" name="nob" value="" class="form-control" placeholder="Enter the name of your benefactor" required='true'></td>
 						</tr>
 						<div>
 							<td style="font-weight: bold;"><h5>Family Composition</h5></td>
 							</div>
 					<tr>
 					  <td style="width:30%">Name:</td>
-							<td><input style="text-transform: uppercase" type="text" name="fcname" value="" class="form-control" placeholder="Enter Name of Benefactor" required='true'></td>
+							<td><input pattern="[^\d]*" title="Please enter letters only" style="text-transform: uppercase" type="text" name="fcname" value="" class="form-control" placeholder="Enter Name of Benefactor" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Relationship:</td>
-							<td><input style="text-transform: uppercase" type="text" name="fcrelationship" value="" class="form-control" placeholder="Enter your Relationship" required='true'></td>
+							<td><input pattern="[^\d]*" title="Please enter letters only" style="text-transform: uppercase" type="text" name="fcrelationship" value="" class="form-control" placeholder="Enter your Relationship" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Age:</td>
@@ -355,12 +377,32 @@ h14 {
 						</tr>
 						<tr>
 					  <td style="width:30%">Occupation:</td>
-							<td><input style="text-transform: uppercase" type="text" name="fcoccu" value="" class="form-control" placeholder="Enter Occupation" required='true'></td>
+							<td><input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="fcoccu" value="" class="form-control" placeholder="Enter Occupation" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Income:</td>
-							<td><input style="text-transform: uppercase" type="text" name="fcincome" value="" class="form-control" placeholder="Enter Income" required='true' maxlength="20" pattern="[0-9]+"></td>
+							<td><input id="anincome2" style="text-transform: uppercase" type="text" name="fcincome" value="" class="form-control" placeholder="Enter Income" required='true' maxlength="20"></td>
 						</tr>
+						<script>
+  // Get the input element
+  var input = document.getElementById("anincome2");
+
+  // Add event listener to the input element
+  input.addEventListener("input", function() {
+    // Get the input value
+    var value = this.value;
+
+    // Remove all non-numeric characters
+    value = value.replace(/[^0-9]/g, "");
+
+    // Format the value with commas and periods
+    var formattedValue = "₱" + value.replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+    formattedValue = formattedValue.replace(/(\d)(?=(\d{2})+\d$)/g, "$1.");
+
+    // Set the formatted value back to the input element
+    this.value = formattedValue;
+  });
+</script>
 						<tr>
 						<td style="width:30%">Contact Number:</td>
 							<td><input style="text-transform: uppercase" type="text" name="altconnum" value="" class="form-control" placeholder="Enter Contact Number" required='true' maxlength="11" pattern="[0-9]+"></td><br>

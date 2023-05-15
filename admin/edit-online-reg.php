@@ -58,7 +58,6 @@ else
 $image=md5($image).time().$extension;
  move_uploaded_file($_FILES["image"]["tmp_name"],"images/".$image);
 $sql="insert into tblsenior(StuID,SurName,MiddleName,FirstName,NickName,DOB,Age,Gender,PoB,Religion,ContactNumber,CitiEmail,CivilStatus,PuAddress,Barangay,EduAt,Skills,Occupation,AnIncome,Pension,NoB,FcName,Relationship,FcAge,FcCiviStatus,FcIncome,Fcoccupation,AltenateNumber,UserName,Password,Image)values(:stuid,:stuname,:mname,:fname,:nname,:dob,:age,:gender,:pob,:religion,:connum,:stuemail,:cstatus,:paddress,:barangay,:eduat,:skills,:occu,:anincome,:pension,:nob,:fcname,:fcrelationship,:fcage,:fcstatus,:fcincome,:fcoccu,:altconnum,:uname,:password,:image)";
-// ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 $query=$dbh->prepare($sql);
 $query->bindParam(':stuid',$stuid,PDO::PARAM_STR);
 $query->bindParam(':stuname',$stuname,PDO::PARAM_STR);
@@ -158,20 +157,15 @@ echo "<script>alert('Username or Senior Id or Senior has already exist. Please t
                     <h4 class="card-title" style="text-align: center;">Edit Online Application</h4>
                     <?php 
 					// Get employee details
-					$stmt = $mysqli->prepare("SELECT `StuID`, `SurName`, `FirstName`, `MiddleName`, `NickName`, `DOB`, `Age`, `Gender`, `Religion`, `PoB`, `ContactNumber`, `CitiEmail`, `CivilStatus`, `PuAddress`, `Barangay`, `EduAt`, `Skills`, `Occupation`, `AnIncome`, `NoB`, `FcName`, `Relationship`, `FcAge`, `FcCiviStatus`, `Fcoccupation`, `FcIncome`, `AltenateNumber`, `Pension`, `filename` FROM `tblonline_registration` WHERE `id` = ?");
+					$stmt = $mysqli->prepare("SELECT `StuID`, `SurName`, `FirstName`, `MiddleName`, `NickName`, `DOB`, `Age`, `Gender`, `Religion`, `PoB`, `ContactNumber`, `CitiEmail`, `CivilStatus`, `PuAddress`, `Barangay`, `EduAt`, `Skills`, `Occupation`, `AnIncome`, `NoB`, `FcName`, `Relationship`, `FcAge`, `FcCiviStatus`, `Fcoccupation`, `FcIncome`, `AltenateNumber`, `Pension` FROM `tblonline_registration` WHERE `id` = ?");
 					$stmt->bind_param("i", $_GET['id']);
 					$stmt->execute();
 					$stmt->store_result();
 					if( $stmt->num_rows == 1 ) {
-						$stmt->bind_result($stuid, $stuname, $fname, $mname, $nname, $dob, $age, $gender, $religion, $pob, $connum, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension, $image);
+						$stmt->bind_result($stuid, $stuname, $fname, $mname, $nname, $dob, $age, $gender, $religion, $pob, $connum, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension);
 						$stmt->fetch();
 					?>
                     <form class="forms-sample" method="post" enctype="multipart/form-data">
-                      
-                    <!-- <div class="form-group">
-                        <label for="exampleInputName1">Citizens Photo</label><br>
-                        <img src="user/uploads/<?=$new_filename;?>" width="100" height="100" value="<?=$image?>"><a href="changeimage.php?editid=<?$id;?>"> &nbsp; Edit Image</a>
-                      </div> -->
                       <div class="form-group">
                         <label for="exampleInputName1">Add Citizen Photo</label>
                         <input type="file" name="image" value="<?=$filename?>" class="form-control" required='true'>
@@ -184,22 +178,22 @@ echo "<script>alert('Username or Senior Id or Senior has already exist. Please t
 
                       <div class="form-group">
                         <label for="exampleInputName1">SurName</label>
-                        <input style="text-transform: uppercase" type="text" name="stuname" value="<?=$stuname?>" class="form-control" required='true'>
+                        <input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="stuname" value="<?=$stuname?>" class="form-control" required='true'>
                       </div>
 
                       <div class="form-group">
                         <label for="exampleInputName1">First Name</label>
-                        <input style="text-transform: uppercase" type="text" name="fname" value="<?=$fname?>" class="form-control" required='true'>
+                        <input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="fname" value="<?=$fname?>" class="form-control" required='true'>
                       </div>
 
                       <div class="form-group">
                         <label for="exampleInputName1">Middle Name</label>
-                        <input style="text-transform: uppercase"  type="text" name="mname" value="<?=$mname?>" class="form-control" required='true'>
+                        <input pattern="[^\d]*" style="text-transform: uppercase"  type="text" name="mname" value="<?=$mname?>" class="form-control" required='true'>
                       </div>
 
                       <div class="form-group">
                         <label for="exampleInputName1">Nick Name</label>
-                        <input style="text-transform: uppercase"  type="text" name="nname" value="<?=$nname?>" class="form-control" required='true'>
+                        <input pattern="[^\d]*" style="text-transform: uppercase"  type="text" name="nname" value="<?=$nname?>" class="form-control" required='true'>
                       </div>
 
                       <div class="form-group">
@@ -223,12 +217,12 @@ echo "<script>alert('Username or Senior Id or Senior has already exist. Please t
 
                       <div class="form-group">
                         <label for="exampleInputName1">Religion</label>
-                        <input style="text-transform: uppercase" type="text" name="religion" value="<?=$religion?>" class="form-control" required='true'>
+                        <input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="religion" value="<?=$religion?>" class="form-control" required='true'>
                       </div>
 
                       <div class="form-group">
                         <label for="exampleInputName1">Place of Birth</label>
-                        <input style="text-transform: uppercase" type="text" name="pob" value="<?=$pob?>" class="form-control" required='true'>
+                        <input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="pob" value="<?=$pob?>" class="form-control" required='true'>
                       </div>
 
                       <div class="form-group">
@@ -290,24 +284,43 @@ echo "<script>alert('Username or Senior Id or Senior has already exist. Please t
 
                       <div class="form-group">
                         <label for="exampleInputName1">Educational Attainment</label>
-                        <input style="text-transform: uppercase" type="text" name="eduat" value="<?=$eduat?>" class="form-control" required='true'>
+                        <input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="eduat" value="<?=$eduat?>" class="form-control" required='true'>
                       </div>
 
                       <div class="form-group">
                         <label for="exampleInputName1">Skills</label>
-                        <input style="text-transform: uppercase" type="text" name="skills" value="<?=$skills?>" class="form-control" required='true'>
+                        <input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="skills" value="<?=$skills?>" class="form-control" required='true'>
                       </div>
 
                       <div class="form-group">
                         <label for="exampleInputName1">Occupation</label>
-                        <input style="text-transform: uppercase" type="text" name="occu" value="<?=$occu?>" class="form-control" required='true'>
+                        <input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="occu" value="<?=$occu?>" class="form-control" required='true'>
                       </div>
 
                       <div class="form-group">
                         <label for="exampleInputName1">Annual Income</label>
-                        <input type="text" name="anincome" value="<?=$anincome?>" class="form-control" required='true' maxlength="20" pattern="[0-9]+">
+                        <input id="anincome" type="text" name="anincome" value="<?=$anincome?>" class="form-control" required='true' maxlength="20">
                       </div>
+                      <script>
+  // Get the input element
+  var input = document.getElementById("anincome");
 
+  // Add event listener to the input element
+  input.addEventListener("input", function() {
+    // Get the input value
+    var value = this.value;
+
+    // Remove all non-numeric characters
+    value = value.replace(/[^0-9]/g, "");
+
+    // Format the value with commas and periods
+    var formattedValue = "₱" + value.replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+    formattedValue = formattedValue.replace(/(\d)(?=(\d{2})+\d$)/g, "$1.");
+
+    // Set the formatted value back to the input element
+    this.value = formattedValue;
+  });
+</script>
                       <div class="form-group">
                         <label for="exampleInputName1">Pension</label>
                         <select style="text-transform: uppercase" name="pension" value="" class="form-control" required='true'>
@@ -319,19 +332,19 @@ echo "<script>alert('Username or Senior Id or Senior has already exist. Please t
 
                       <div class="form-group">
                         <label for="exampleInputName1">Name of Benefactor, if any:</label>
-                        <input style="text-transform: uppercase" type="text" name="nob" value="<?=$nob?>" class="form-control" required='true'>
+                        <input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="nob" value="<?=$nob?>" class="form-control" required='true'>
                       </div>
 
                       <h3>Family Composition</h3>
 
                       <div class="form-group">
                         <label for="exampleInputName1">Name</label>
-                        <input style="text-transform: uppercase" type="text" name="fcname" value="<?=$fcname?>" class="form-control" required='true'>
+                        <input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="fcname" value="<?=$fcname?>" class="form-control" required='true'>
                       </div>
 
                       <div class="form-group">
                         <label for="exampleInputName1">Relationship</label>
-                        <input style="text-transform: uppercase" type="text" name="fcrelationship" value="<?=$fcrelationship?>" class="form-control" required='true'>
+                        <input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="fcrelationship" value="<?=$fcrelationship?>" class="form-control" required='true'>
                       </div>
 
                       <div class="form-group">
@@ -353,14 +366,33 @@ echo "<script>alert('Username or Senior Id or Senior has already exist. Please t
 
                       <div class="form-group">
                         <label for="exampleInputName1">Occupation</label>
-                        <input style="text-transform: uppercase" type="text" name="fcoccu" value="<?=$fcoccu?>" class="form-control" required='true'>
+                        <input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="fcoccu" value="<?=$fcoccu?>" class="form-control" required='true'>
                       </div>
 
                       <div class="form-group">
                         <label for="exampleInputName1">Income</label>
-                        <input type="text" name="fcincome" value="<?=$fcincome?>" class="form-control" required='true' maxlength="20" pattern="[0-9]+">
+                        <input type="text" name="fcincome" id="anincome2" value="<?=$fcincome?>" class="form-control" required='true' maxlength="20">
                       </div>
-                      
+                      <script>
+  // Get the input element
+  var input = document.getElementById("anincome2");
+
+  // Add event listener to the input element
+  input.addEventListener("input", function() {
+    // Get the input value
+    var value = this.value;
+
+    // Remove all non-numeric characters
+    value = value.replace(/[^0-9]/g, "");
+
+    // Format the value with commas and periods
+    var formattedValue = "₱" + value.replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+    formattedValue = formattedValue.replace(/(\d)(?=(\d{2})+\d$)/g, "$1.");
+
+    // Set the formatted value back to the input element
+    this.value = formattedValue;
+  });
+</script>
                       <div class="form-group">
                         <label for="exampleInputName1">Contact Number</label>
                         <input type="text" name="altconnum" value="<?=$altconnum?>" class="form-control" required='true' maxlength="11" pattern="[0-9]+">
