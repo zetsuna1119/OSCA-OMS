@@ -61,7 +61,7 @@ if (strlen($_SESSION['sturecmsaid']==0)) {
                 <div class="card">
                   <div class="card-body">
                     <div class="d-sm-flex align-items-center mb-4">
-                      <a href="add-students.php" class="btn btn-sm btn-primary"><i class="icon-plus"></i> Add New Senior</a>
+                      <a href="add-senior.php" class="btn btn-sm btn-primary"><i class="icon-plus"></i> Add New Senior</a>
                     </div>
                     <div class="table-responsive border rounded p-1">
                       <table class="table">

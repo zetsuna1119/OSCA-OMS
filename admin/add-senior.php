@@ -17,6 +17,7 @@ if (strlen($_SESSION['sturecmsaid']==0)) {
  $religion=$_POST['religion'];
  $pob=$_POST['pob'];
  $connum=$_POST['connum'];
+ $controlno=$_POST['controlno'];
  $cstatus=$_POST['cstatus'];
  $paddress=$_POST['paddress'];
  $barangay=$_POST['barangay'];
@@ -56,7 +57,7 @@ else
 {
 $image=md5($image).time().$extension;
  move_uploaded_file($_FILES["image"]["tmp_name"],"images/".$image);
-$sql="insert into tblsenior(StuID,SurName,MiddleName,FirstName,NickName,DOB,Age,Gender,PoB,Religion,ContactNumber,CitiEmail,CivilStatus,PuAddress,Barangay,EduAt,Skills,Occupation,AnIncome,Pension,NoB,FcName,Relationship,FcAge,FcCiviStatus,FcIncome,Fcoccupation,AltenateNumber,UserName,Password,Image)values(:stuid,:stuname,:mname,:fname,:nname,:dob,:age,:gender,:pob,:religion,:connum,:stuemail,:cstatus,:paddress,:barangay,:eduat,:skills,:occu,:anincome,:pension,:nob,:fcname,:fcrelationship,:fcage,:fcstatus,:fcincome,:fcoccu,:altconnum,:uname,:password,:image)";
+$sql="insert into tblsenior(StuID,SurName,MiddleName,FirstName,NickName,DOB,Age,Gender,PoB,Religion,ContactNumber,ControlNo,CitiEmail,CivilStatus,PuAddress,Barangay,EduAt,Skills,Occupation,AnIncome,Pension,NoB,FcName,Relationship,FcAge,FcCiviStatus,FcIncome,Fcoccupation,AltenateNumber,UserName,Password,Image)values(:stuid,:stuname,:mname,:fname,:nname,:dob,:age,:gender,:pob,:religion,:connum,:controlno,:stuemail,:cstatus,:paddress,:barangay,:eduat,:skills,:occu,:anincome,:pension,:nob,:fcname,:fcrelationship,:fcage,:fcstatus,:fcincome,:fcoccu,:altconnum,:uname,:password,:image)";
 $query=$dbh->prepare($sql);
 $query->bindParam(':stuid',$stuid,PDO::PARAM_STR);
 $query->bindParam(':stuname',$stuname,PDO::PARAM_STR);
@@ -69,6 +70,7 @@ $query->bindParam(':gender',$gender,PDO::PARAM_STR);
 $query->bindParam(':pob',$pob,PDO::PARAM_STR);
 $query->bindParam(':religion',$religion,PDO::PARAM_STR);
 $query->bindParam(':connum',$connum,PDO::PARAM_STR);
+$query->bindParam(':controlno',$controlno,PDO::PARAM_STR);
 $query->bindParam(':stuemail',$stuemail,PDO::PARAM_STR);
 $query->bindParam(':cstatus',$cstatus,PDO::PARAM_STR);
 $query->bindParam(':paddress',$paddress,PDO::PARAM_STR);
@@ -240,6 +242,10 @@ return false;
                         <label for="exampleInputName1">Senior Citizen ID</label>
                         <input type="text" name="stuid" value="" class="form-control" required='true'>
                       </div>
+                      <div class="form-group">
+                        <label for="exampleInputName1">Senior Citizen Control No:</label>
+                        <input type="text" name="controlno" value="" class="form-control" required='true'>
+                      </div>
 
                       <div class="form-group">
                         <label for="exampleInputName1">SurName</label>
@@ -363,9 +369,28 @@ return false;
 
                       <div class="form-group">
                         <label for="exampleInputName1">Annual Income</label>
-                        <input type="text" name="anincome" value="" class="form-control" required='true' maxlength="20" pattern="[0-9]+">
+                        <input type="text" id="anincome" name="anincome" value="" class="form-control" required='true' maxlength="20" pattern="[0-9]+">
                       </div>
+                      <script>
+  // Get the input element
+  var input = document.getElementById("anincome");
 
+  // Add event listener to the input element
+  input.addEventListener("input", function() {
+    // Get the input value
+    var value = this.value;
+
+    // Remove all non-numeric characters
+    value = value.replace(/[^0-9]/g, "");
+
+    // Format the value with commas and periods
+    var formattedValue = "₱" + value.replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+    formattedValue = formattedValue.replace(/(\d)(?=(\d{2})+\d$)/g, "$1.");
+
+    // Set the formatted value back to the input element
+    this.value = formattedValue;
+  });
+</script>
                       <div class="form-group">
                         <label for="exampleInputName1">With Pension?:</label>
                         <select style="text-transform: uppercase" name="pension" value="" class="form-control" required='true'>
@@ -416,9 +441,28 @@ return false;
 
                       <div class="form-group">
                         <label for="exampleInputName1">Income</label>
-                        <input type="text" name="fcincome" value="" class="form-control" required='true' maxlength="20" pattern="[0-9]+">
+                        <input type="text" id="anincome2" name="fcincome" value="" class="form-control" required='true' maxlength="20" pattern="[0-9]+">
                       </div>
-                      
+<script>
+  // Get the input element
+  var input = document.getElementById("anincome2");
+
+  // Add event listener to the input element
+  input.addEventListener("input", function() {
+    // Get the input value
+    var value = this.value;
+
+    // Remove all non-numeric characters
+    value = value.replace(/[^0-9]/g, "");
+
+    // Format the value with commas and periods
+    var formattedValue = "₱" + value.replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+    formattedValue = formattedValue.replace(/(\d)(?=(\d{2})+\d$)/g, "$1.");
+
+    // Set the formatted value back to the input element
+    this.value = formattedValue;
+  });
+</script>
                       <div class="form-group">
                         <label for="exampleInputName1">Contact Number</label>
                         <input type="text" name="altconnum" value="" class="form-control" required='true' maxlength="10" pattern="[0-9]+">

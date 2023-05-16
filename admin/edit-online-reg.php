@@ -36,6 +36,7 @@ if (strlen($_SESSION['sturecmsaid']==0)) {
  $fcincome=$_POST['fcincome'];
  $altconnum=$_POST['altconnum'];
  $stuemail=$_POST['stuemail'];
+ $controlno=$_POST['controlno'];
  $stuid=$_POST['stuid'];
  $uname=$_POST['uname'];
  $password=md5($_POST['password']);
@@ -57,7 +58,7 @@ else
 {
 $image=md5($image).time().$extension;
  move_uploaded_file($_FILES["image"]["tmp_name"],"images/".$image);
-$sql="insert into tblsenior(StuID,SurName,MiddleName,FirstName,NickName,DOB,Age,Gender,PoB,Religion,ContactNumber,CitiEmail,CivilStatus,PuAddress,Barangay,EduAt,Skills,Occupation,AnIncome,Pension,NoB,FcName,Relationship,FcAge,FcCiviStatus,FcIncome,Fcoccupation,AltenateNumber,UserName,Password,Image)values(:stuid,:stuname,:mname,:fname,:nname,:dob,:age,:gender,:pob,:religion,:connum,:stuemail,:cstatus,:paddress,:barangay,:eduat,:skills,:occu,:anincome,:pension,:nob,:fcname,:fcrelationship,:fcage,:fcstatus,:fcincome,:fcoccu,:altconnum,:uname,:password,:image)";
+$sql="insert into tblsenior(StuID,SurName,MiddleName,FirstName,NickName,DOB,Age,Gender,PoB,Religion,ContactNumber,CitiEmail,CivilStatus,PuAddress,Barangay,EduAt,Skills,Occupation,AnIncome,Pension,NoB,FcName,Relationship,FcAge,FcCiviStatus,FcIncome,Fcoccupation,AltenateNumber,ControlNo,UserName,Password,Image)values(:stuid,:stuname,:mname,:fname,:nname,:dob,:age,:gender,:pob,:religion,:connum,:stuemail,:cstatus,:paddress,:barangay,:eduat,:skills,:occu,:anincome,:pension,:nob,:fcname,:fcrelationship,:fcage,:fcstatus,:fcincome,:fcoccu,:altconnum,:controlno,:uname,:password,:image)";
 $query=$dbh->prepare($sql);
 $query->bindParam(':stuid',$stuid,PDO::PARAM_STR);
 $query->bindParam(':stuname',$stuname,PDO::PARAM_STR);
@@ -87,6 +88,7 @@ $query->bindParam(':fcstatus',$fcstatus,PDO::PARAM_STR);
 $query->bindParam(':fcincome',$fcincome,PDO::PARAM_STR);
 $query->bindParam(':fcoccu',$fcoccu,PDO::PARAM_STR);
 $query->bindParam(':altconnum',$altconnum,PDO::PARAM_STR);
+$query->bindParam(':controlno',$controlno,PDO::PARAM_STR);
 $query->bindParam(':image',$image,PDO::PARAM_STR);
 $query->bindParam(':uname',$uname,PDO::PARAM_STR);
 $query->bindParam(':password',$password,PDO::PARAM_STR);
@@ -170,7 +172,10 @@ echo "<script>alert('Username or Senior Id or Senior has already exist. Please t
                         <label for="exampleInputName1">Add Citizen Photo</label>
                         <input type="file" name="image" value="<?=$filename?>" class="form-control" required='true'>
                       </div>
-
+                      <div class="form-group">
+                        <label for="exampleInputName1">Control No.</label>
+                        <input type="text" name="controlno" value="<?=$controlno?>" class="form-control" required='true'>
+                      </div>
                     <div class="form-group">
                         <label for="exampleInputName1">Senior Citizen ID</label>
                         <input type="text" name="stuid" value="<?=$stuid?>" class="form-control" required='true'>

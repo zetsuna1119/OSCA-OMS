@@ -107,7 +107,7 @@ $totalpending=$query1->rowCount();
               </a>
               <div class="collapse" id="ui-basic1">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="add-students.php">Add Senior Citizen</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="add-senior.php">Add Senior Citizen</a></li>
                   <li class="nav-item"> <a class="nav-link" href="manage_senior.php">Manage Senior Citizens</a></li>
                   <li class="nav-item"> <a class="nav-link" href="search-senior-list.php">Search Senior</a></li>
                 </ul>

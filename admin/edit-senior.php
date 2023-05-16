@@ -17,6 +17,7 @@ if( isset($_POST['btnSubmit']) )
 	$religion = $mysqli->real_escape_string( $_POST['religion'] );
 	$pob = $mysqli->real_escape_string( $_POST['pob'] );
 	$connum = $mysqli->real_escape_string( $_POST['connum'] );
+	$controlno = $mysqli->real_escape_string( $_POST['controlno'] );
 	$stuemail = $mysqli->real_escape_string( $_POST['stuemail'] );
 	$cstatus = $mysqli->real_escape_string( $_POST['cstatus'] );
 	$paddress = $mysqli->real_escape_string( $_POST['paddress'] );
@@ -36,10 +37,10 @@ if( isset($_POST['btnSubmit']) )
 	$pension = $mysqli->real_escape_string( $_POST['pension'] );
 
 	// Prepared statement
-	$stmt = $mysqli->prepare("UPDATE `tblsenior` SET `StuID`=?, `SurName`=?, `FirstName`=?, `MiddleName`=?, `NickName`=?, `DOB`=?, `Age`=?, `Gender`=?, `Religion`=?, `PoB`=?, `ContactNumber`=?, `CitiEmail`=?, `CivilStatus`=?, `PuAddress`=?, `Barangay`=?, `EduAt`=?, `Skills`=?, `Occupation`=?, `AnIncome`=?, `NoB`=?, `FcName`=?,  `Relationship`=?, `FcAge`=?, `FcCiviStatus`=?, `Fcoccupation`=?, `FcIncome`=?, `AltenateNumber`=?,  `Pension`=? WHERE `id`=?");
+	$stmt = $mysqli->prepare("UPDATE `tblsenior` SET `StuID`=?, `SurName`=?, `FirstName`=?, `MiddleName`=?, `NickName`=?, `DOB`=?, `Age`=?, `Gender`=?, `Religion`=?, `PoB`=?, `ContactNumber`=?, `ControlNo`=?, `CitiEmail`=?, `CivilStatus`=?, `PuAddress`=?, `Barangay`=?, `EduAt`=?, `Skills`=?, `Occupation`=?, `AnIncome`=?, `NoB`=?, `FcName`=?,  `Relationship`=?, `FcAge`=?, `FcCiviStatus`=?, `Fcoccupation`=?, `FcIncome`=?, `AltenateNumber`=?,  `Pension`=? WHERE `id`=?");
 
 	// Bind params
-	$stmt->bind_param( "ssssssssssssssssssssssssssssi", $stuid, $stuname, $fname, $mname,  $nname, $dob, $age, $gender, $religion, $pob, $connum, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension, $_GET['id'] );
+	$stmt->bind_param( "sssssssssssssssssssssssssssssi", $stuid, $stuname, $fname, $mname,  $nname, $dob, $age, $gender, $religion, $pob, $connum, $controlno, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension, $_GET['id'] );
 
 	// Execute query
 	if( $stmt->execute() ) {
@@ -285,12 +286,12 @@ p {
 
 					<?php 
 					// Get employee details
-					$stmt = $mysqli->prepare("SELECT `StuID`, `SurName`, `FirstName`, `MiddleName`, `NickName`, `DOB`, `Age`, `Gender`, `Religion`, `PoB`, `ContactNumber`, `CitiEmail`, `CivilStatus`, `PuAddress`, `Barangay`, `EduAt`, `Skills`, `Occupation`, `AnIncome`, `NoB`, `FcName`, `Relationship`, `FcAge`, `FcCiviStatus`, `Fcoccupation`, `FcIncome`, `AltenateNumber`, `Pension`, `Image` FROM `tblsenior` WHERE `id` = ?");
+					$stmt = $mysqli->prepare("SELECT `StuID`, `SurName`, `FirstName`, `MiddleName`, `NickName`, `DOB`, `Age`, `Gender`, `Religion`, `PoB`, `ContactNumber`, `ControlNo`, `CitiEmail`, `CivilStatus`, `PuAddress`, `Barangay`, `EduAt`, `Skills`, `Occupation`, `AnIncome`, `NoB`, `FcName`, `Relationship`, `FcAge`, `FcCiviStatus`, `Fcoccupation`, `FcIncome`, `AltenateNumber`, `Pension`, `Image` FROM `tblsenior` WHERE `id` = ?");
 					$stmt->bind_param("i", $_GET['id']);
 					$stmt->execute();
 					$stmt->store_result();
 					if( $stmt->num_rows == 1 ) {
-						$stmt->bind_result($stuid, $stuname, $fname, $mname, $nname, $dob, $age, $gender, $religion, $pob, $connum, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension, $image);
+						$stmt->bind_result($stuid, $stuname, $fname, $mname, $nname, $dob, $age, $gender, $religion, $pob, $connum, $controlno, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension, $image);
 						$stmt->fetch();
 					?>
 					<div class="cent">
@@ -387,6 +388,10 @@ p {
 						<tr class="form-group">
 							<td style="width:30%">Senior Number:</td>
 							<td><input required class="form-control" type="text" name="stuid" style="width:100%;" placeholder="Enter Senior ID Number" value="<?=$stuid?>"></td>
+						</tr>
+						<tr class="form-group">
+							<td style="width:30%">Control No:</td>
+							<td><input required class="form-control" type="text" name="controlno" style="width:100%;" placeholder="Enter Control Number" value="<?=$controlno?>"></td>
 						</tr>
 						<tr>
 							<td style="width:30%">SurName:</td>
