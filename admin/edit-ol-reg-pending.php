@@ -11,6 +11,7 @@ if( isset($_POST['btnSubmit']) ) {
 	$stuname = $mysqli->real_escape_string( $_POST['stuname'] );
 	$fname = $mysqli->real_escape_string( $_POST['fname'] );
 	$mname = $mysqli->real_escape_string( $_POST['mname'] );
+	$nname = $mysqli->real_escape_string( $_POST['nname'] );
 	$dob = $mysqli->real_escape_string( $_POST['dob'] );
 	$age = $mysqli->real_escape_string( $_POST['age'] );
 	$gender = $mysqli->real_escape_string( $_POST['gender'] );
@@ -37,10 +38,10 @@ if( isset($_POST['btnSubmit']) ) {
     $status = $mysqli->real_escape_string( $_POST['status'] );
 
 	// Prepared statement
-	$stmt = $mysqli->prepare("UPDATE `tblonline_registration` SET `StuID`=?, `SurName`=?, `FirstName`=?, `MiddleName`=?, `DOB`=?, `Age`=?, `Gender`=?, `Religion`=?, `PoB`=?, `ContactNumber`=?, `CitiEmail`=?, `CivilStatus`=?, `PuAddress`=?, `Barangay`=?, `EduAt`=?, `Skills`=?, `Occupation`=?, `AnIncome`=?, `NoB`=?, `FcName`=?,  `Relationship`=?, `FcAge`=?, `FcCiviStatus`=?, `Fcoccupation`=?, `FcIncome`=?, `AltenateNumber`=?, `Pension`=?, `Status`=? WHERE `id`=?");
+	$stmt = $mysqli->prepare("UPDATE `tblonline_registration` SET `StuID`=?, `SurName`=?, `FirstName`=?, `MiddleName`=?, `NickName`=?, `DOB`=?, `Age`=?, `Gender`=?, `Religion`=?, `PoB`=?, `ContactNumber`=?, `CitiEmail`=?, `CivilStatus`=?, `PuAddress`=?, `Barangay`=?, `EduAt`=?, `Skills`=?, `Occupation`=?, `AnIncome`=?, `NoB`=?, `FcName`=?,  `Relationship`=?, `FcAge`=?, `FcCiviStatus`=?, `Fcoccupation`=?, `FcIncome`=?, `AltenateNumber`=?, `Pension`=?, `Status`=? WHERE `id`=?");
 
 	// Bind params
-	$stmt->bind_param( "ssssssssssssssssssssssssssssi", $stuid, $stuname, $fname, $mname, $dob, $age, $gender, $religion, $pob, $connum, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension, $status, $_GET['id'] );
+	$stmt->bind_param( "sssssssssssssssssssssssssssssi", $stuid, $stuname, $fname, $mname, $nname, $dob, $age, $gender, $religion, $pob, $connum, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension, $status, $_GET['id'] );
 
 	// Execute query
 	if( $stmt->execute() ) {
@@ -161,12 +162,12 @@ if( isset($_POST['btnSubmit']) ) {
 
 					<?php 
 					// Get employee details
-					$stmt = $mysqli->prepare("SELECT `StuID`, `SurName`, `FirstName`, `MiddleName`, `DOB`, `Age`, `Gender`, `Religion`, `PoB`, `ContactNumber`, `CitiEmail`, `CivilStatus`, `PuAddress`, `Barangay`, `EduAt`, `Skills`, `Occupation`, `AnIncome`, `NoB`, `FcName`, `Relationship`, `FcAge`, `FcCiviStatus`, `Fcoccupation`, `FcIncome`, `AltenateNumber`, `Pension` FROM `tblonline_registration` WHERE `id` = ?");
+					$stmt = $mysqli->prepare("SELECT `StuID`, `SurName`, `FirstName`, `MiddleName`, `NickName`, `DOB`, `Age`, `Gender`, `Religion`, `PoB`, `ContactNumber`, `CitiEmail`, `CivilStatus`, `PuAddress`, `Barangay`, `EduAt`, `Skills`, `Occupation`, `AnIncome`, `NoB`, `FcName`, `Relationship`, `FcAge`, `FcCiviStatus`, `Fcoccupation`, `FcIncome`, `AltenateNumber`, `Pension` FROM `tblonline_registration` WHERE `id` = ?");
 					$stmt->bind_param("i", $_GET['id']);
 					$stmt->execute();
 					$stmt->store_result();
 					if( $stmt->num_rows == 1 ) {
-						$stmt->bind_result($stuid, $stuname, $fname, $mname, $dob, $age, $gender, $religion, $pob, $connum, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension);
+						$stmt->bind_result($stuid, $stuname, $fname, $mname, $nname, $dob, $age, $gender, $religion, $pob, $connum, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension);
 						$stmt->fetch();
 					?>
 					<form class="forms-sample" method="post" enctype="multipart/form-data">
@@ -186,6 +187,10 @@ if( isset($_POST['btnSubmit']) ) {
 						<tr>
 							<td style="width:30%">Middle Name:</td>
 							<td><input pattern="[^\d]*" required class="form-control" style="text-transform: uppercase" type="text" name="mname" style="width:100%;" placeholder="Enter Middle Name" value="<?=$mname?>"></td>
+						</tr>
+						<tr>
+							<td style="width:30%">Nick Name:</td>
+							<td><input pattern="[^\d]*" title="Please enter letters only" style="text-transform: uppercase" required type="text" class="form-control" name="nname" value="<?=$nname?>" style="width:100%;" placeholder="Enter Nick Name"></td>
 						</tr>
 						<tr>
 							<td style="width:30%">Date of Birth:</td>

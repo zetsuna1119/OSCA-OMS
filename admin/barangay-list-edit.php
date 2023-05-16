@@ -153,7 +153,7 @@ text-transform: uppercase;
 	.strupper1{
 text-transform: uppercase;
 }/* The Modal (background) */
-.modal {
+.modal1 {
   display: none; /* Hidden by default */
   position: absolute; /* Stay in place */
   z-index: 1; /* Sit on top */
@@ -168,7 +168,7 @@ text-transform: uppercase;
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 /* Modal Content */
-.modal-content {
+.modal-content1 {
   position: relative;
   background-color: #fefefe;
   margin-top: 500px;
@@ -233,7 +233,7 @@ p {
   margin-top: auto;
 }
 .bttnlist {
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: #181824;
   margin-bottom: 10px;
   position: relative;
@@ -243,7 +243,7 @@ p {
   font-size: 15px;
   padding: 10px;
   height: 35px;
-  width: 100px;
+  width: 110px;
   transition: all 0.5s;
   cursor: pointer;
 }
@@ -315,18 +315,76 @@ p {
         }
     }
     ?>
-    <img src="images/<?=$image?>" width="120" height="120" value="<?=$image?>"><a href="update_image.php?id=<?$id;?>"> &nbsp;</a>
-    <button class="bttnlist" id="myBtn"><span>View</span></button>
+<!-- Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-content">
+        <form method="POST" enctype="multipart/form-data">
+		<label for="exampleInputName1" >Citizens Photo</label><br>
+    <img src="images/<?=$image?>" width="120" height="120" style="margin: auto; display: block;" value="<?=$image?>"><a href="update_image.php?id=<?$id;?>"> &nbsp;</a>
+            <label for="new_image">Update Image:</label><br>
+            <input type="file" name="new_image"><br><br>
+            <input type="submit" name="update_image" class="btn btn-primary" value="Update Image"><br><br>
+        </form>
+        <button class="btn btn-danger" id="closeModalBtn">Close</button>
+    </div>
 </div>
+<style>
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
 
+    .modal-content {
+        background-color: #fff;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 500px;
+		box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  		-webkit-animation-name: animatetop;
+  		-webkit-animation-duration: 0.4s;
+  		animation-name: animatetop;
+  		animation-duration: 0.4s
+	}
+	/* Add Animation */
+	@-webkit-keyframes animatetop {
+		from {top:-300px; opacity:0} 
+		to {top:0; opacity:1}
+	}
+	@keyframes animatetop {
+		from {top:-300px; opacity:0}
+		to {top:0; opacity:1}
+	}	
+</style>
+    <label for="exampleInputName1">Citizens Photo</label><br>
+    <img src="images/<?=$image?>" width="120" height="120" value="<?=$image?>"><a href="update_image.php?id=<?$id;?>"> &nbsp;</a>
+    <!-- Button to open the modal -->
+	<button class="btn btn-primary" style="width: 110px;" id="openModalBtn1"><span>Edit Image</span></button>
+	<div style="margin-top: 5px;">
+	<button class="bttnlist" id="myBtn"><span>View Info</span></button>
+</div>
+	<script>
+    // Open the modal when the button is clicked
+    document.getElementById("openModalBtn1").addEventListener("click", function() {
+        document.getElementById("myModal").style.display = "block";
+    });
+
+    // Close the modal when the close button is clicked
+    document.getElementById("closeModalBtn").addEventListener("click", function() {
+        document.getElementById("myModal").style.display = "none";
+    });
+</script>
+</div>
 <form class="forms-sample" method="post" enctype="multipart/form-data">
     <table width="60%" cellpadding="5" cellspacing="5" align="center">
-        <tr class="form-group">
-            <td style="width:30%">Update Image:</td>
-            <td><input type="file" name="new_image"><br><br></td>
-            <td><input type="submit" name="update_image" value="Update Image"><br><br></td>
-        </tr> 
-
 						<tr class="form-group">
 							<td style="width:30%">Senior Number:</td>
 							<td><input required class="form-control" type="text" name="stuid" style="width:100%;" placeholder="Enter Senior ID Number" value="<?=$stuid?>"></td>
@@ -544,10 +602,9 @@ p {
 		<body>
 
 <!-- The Modal -->
-<div id="myModal" class="modal">
-
+<div id="myModal1" class="modal1">
   <!-- Modal content -->
-  <div class="modal-content">
+  <div class="modal-content1">
     <div class="modal-header">
     <h21>Senior Profile</h21>
       <span class="close">&times;</span>
@@ -600,10 +657,9 @@ p {
   </div> -->
 
 </div>
-
 <script>
 // Get the modal
-var modal = document.getElementById("myModal");
+var modal = document.getElementById("myModal1");
 
 // Get the button that opens the modal
 var btn = document.getElementById("myBtn");
@@ -628,7 +684,6 @@ window.onclick = function(event) {
   }
 }
 </script>
-
 </body>
 	</body>
 </html>
