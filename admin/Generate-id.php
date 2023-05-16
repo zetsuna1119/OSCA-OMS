@@ -9,12 +9,12 @@ $pdf->SetAutoPageBreak(true, -40);
 $pdf->SetFont('Times', 'B', 9);
 $pdf->AddPage();
 					// Get senior details
-					$stmt = $mysqli->prepare("SELECT `StuID`, `SurName`, `FirstName`, `MiddleName`, `DOB`, `Age`, `Gender`, `Religion`, `PoB`, `ContactNumber`, `CitiEmail`, `CivilStatus`, `PuAddress`, `Barangay`, `EduAt`, `Skills`, `Occupation`, `AnIncome`, `NoB`, `FcName`, `Relationship`, `FcAge`, `FcCiviStatus`, `Fcoccupation`, `FcIncome`, `AltenateNumber`, `Pension`, `Image` FROM `tblsenior` WHERE `id` = ?");
+					$stmt = $mysqli->prepare("SELECT `StuID`, `SurName`, `FirstName`, `MiddleName`,`ControlNo`, `DOB`, `Age`, `Gender`, `Religion`, `PoB`, `ContactNumber`, `CitiEmail`, `CivilStatus`, `PuAddress`, `Barangay`, `EduAt`, `Skills`, `Occupation`, `AnIncome`, `NoB`, `FcName`, `Relationship`, `FcAge`, `FcCiviStatus`, `Fcoccupation`, `FcIncome`, `AltenateNumber`, `Pension`, `Image` FROM `tblsenior` WHERE `id` = ?");
 					$stmt->bind_param("i", $_GET['id']);
 					$stmt->execute();
 					$stmt->store_result();
 					if( $stmt->num_rows == 1 ) {
-						$stmt->bind_result($stuid, $stuname, $fname, $mname, $dob, $age, $gender, $religion, $pob, $connum, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension, $image);
+						$stmt->bind_result($stuid, $stuname, $fname, $mname, $controlno, $dob, $age, $gender, $religion, $pob, $connum, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension, $image);
 						$stmt->fetch();
 
                         $date = date('F j, Y');
@@ -30,7 +30,7 @@ $pdf->AddPage();
                         $pdf->Cell(0, 3, 'Sierra Bullones, Bohol', 0, 1, 'C');
                         $pdf->Ln();
                         $pdf->SetFont('Times', 'B', 7);
-                        $pdf->Cell(0, 3, 'Control No. '. $stuid, 0, 0, 'L');
+                        $pdf->Cell(0, 3, 'Control No. '. $controlno, 0, 0, 'L');
                         $pdf->Ln();
                         $pdf->Cell(0, 3, 'Name: '.(strtoupper($stuname)).', '.(strtoupper($fname)).' '.(strtoupper($mname)), 0, 1, 'L');
                         $pdf->Ln();

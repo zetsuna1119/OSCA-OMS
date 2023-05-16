@@ -5,19 +5,19 @@ require 'config.php';
 // Form click or submit
 if( isset($_POST['btnSubmit']) ) 
 {
-
 	// Fetch input $_POST
-	
 	$stuid = $mysqli->real_escape_string( $_POST['stuid'] );
 	$stuname = $mysqli->real_escape_string( $_POST['stuname'] );
 	$fname = $mysqli->real_escape_string( $_POST['fname'] );
 	$mname = $mysqli->real_escape_string( $_POST['mname'] );
+	$nname = $mysqli->real_escape_string( $_POST['nname'] );
 	$dob = $mysqli->real_escape_string( $_POST['dob'] );
 	$age = $mysqli->real_escape_string( $_POST['age'] );
 	$gender = $mysqli->real_escape_string( $_POST['gender'] );
 	$religion = $mysqli->real_escape_string( $_POST['religion'] );
 	$pob = $mysqli->real_escape_string( $_POST['pob'] );
 	$connum = $mysqli->real_escape_string( $_POST['connum'] );
+	$controlno = $mysqli->real_escape_string( $_POST['controlno'] );
 	$stuemail = $mysqli->real_escape_string( $_POST['stuemail'] );
 	$cstatus = $mysqli->real_escape_string( $_POST['cstatus'] );
 	$paddress = $mysqli->real_escape_string( $_POST['paddress'] );
@@ -37,10 +37,10 @@ if( isset($_POST['btnSubmit']) )
 	$pension = $mysqli->real_escape_string( $_POST['pension'] );
 
 	// Prepared statement
-	$stmt = $mysqli->prepare("UPDATE `tblsenior` SET `StuID`=?, `SurName`=?, `FirstName`=?, `MiddleName`=?, `DOB`=?, `Age`=?, `Gender`=?, `Religion`=?, `PoB`=?, `ContactNumber`=?, `CitiEmail`=?, `CivilStatus`=?, `PuAddress`=?, `Barangay`=?, `EduAt`=?, `Skills`=?, `Occupation`=?, `AnIncome`=?, `NoB`=?, `FcName`=?,  `Relationship`=?, `FcAge`=?, `FcCiviStatus`=?, `Fcoccupation`=?, `FcIncome`=?, `AltenateNumber`=?,  `Pension`=? WHERE `id`=?");
+	$stmt = $mysqli->prepare("UPDATE `tblsenior` SET `StuID`=?, `SurName`=?, `FirstName`=?, `MiddleName`=?, `NickName`=?, `DOB`=?, `Age`=?, `Gender`=?, `Religion`=?, `PoB`=?, `ContactNumber`=?, `ControlNo`=?, `CitiEmail`=?, `CivilStatus`=?, `PuAddress`=?, `Barangay`=?, `EduAt`=?, `Skills`=?, `Occupation`=?, `AnIncome`=?, `NoB`=?, `FcName`=?,  `Relationship`=?, `FcAge`=?, `FcCiviStatus`=?, `Fcoccupation`=?, `FcIncome`=?, `AltenateNumber`=?,  `Pension`=? WHERE `id`=?");
 
 	// Bind params
-	$stmt->bind_param( "sssssssssssssssssssssssssssi", $stuid, $stuname, $fname, $mname, $dob, $age, $gender, $religion, $pob, $connum, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension, $_GET['id'] );
+	$stmt->bind_param( "sssssssssssssssssssssssssssssi", $stuid, $stuname, $fname, $mname,  $nname, $dob, $age, $gender, $religion, $pob, $connum, $controlno, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension, $_GET['id'] );
 
 	// Execute query
 	if( $stmt->execute() ) {
@@ -286,12 +286,12 @@ p {
 
 					<?php 
 					// Get employee details
-					$stmt = $mysqli->prepare("SELECT `StuID`, `SurName`, `FirstName`, `MiddleName`, `DOB`, `Age`, `Gender`, `Religion`, `PoB`, `ContactNumber`, `CitiEmail`, `CivilStatus`, `PuAddress`, `Barangay`, `EduAt`, `Skills`, `Occupation`, `AnIncome`, `NoB`, `FcName`, `Relationship`, `FcAge`, `FcCiviStatus`, `Fcoccupation`, `FcIncome`, `AltenateNumber`, `Pension`, `Image` FROM `tblsenior` WHERE `id` = ?");
+					$stmt = $mysqli->prepare("SELECT `StuID`, `SurName`, `FirstName`, `MiddleName`, `NickName`, `DOB`, `Age`, `Gender`, `Religion`, `PoB`, `ContactNumber`, `ControlNo`, `CitiEmail`, `CivilStatus`, `PuAddress`, `Barangay`, `EduAt`, `Skills`, `Occupation`, `AnIncome`, `NoB`, `FcName`, `Relationship`, `FcAge`, `FcCiviStatus`, `Fcoccupation`, `FcIncome`, `AltenateNumber`, `Pension`, `Image` FROM `tblsenior` WHERE `id` = ?");
 					$stmt->bind_param("i", $_GET['id']);
 					$stmt->execute();
 					$stmt->store_result();
 					if( $stmt->num_rows == 1 ) {
-						$stmt->bind_result($stuid, $stuname, $fname, $mname, $dob, $age, $gender, $religion, $pob, $connum, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension, $image);
+						$stmt->bind_result($stuid, $stuname, $fname, $mname, $nname, $dob, $age, $gender, $religion, $pob, $connum, $controlno, $stuemail, $cstatus, $paddress, $barangay, $eduat, $skills, $occu, $anincome, $nob, $fcname, $fcrelationship, $fcage, $fcstatus, $fcoccu, $fcincome, $altconnum, $pension, $image);
 						$stmt->fetch();
 					?>
 					<div class="cent">
@@ -389,17 +389,25 @@ p {
 							<td style="width:30%">Senior Number:</td>
 							<td><input required class="form-control" type="text" name="stuid" style="width:100%;" placeholder="Enter Senior ID Number" value="<?=$stuid?>"></td>
 						</tr>
+						<tr class="form-group">
+							<td style="width:30%">Control No:</td>
+							<td><input required class="form-control" type="text" name="controlno" style="width:100%;" placeholder="Enter Control Number" value="<?=$controlno?>"></td>
+						</tr>
 						<tr>
-							<td style="width:30%">Sur Name:</td>
-							<td><input pattern="[^\d]*" required class="form-control" style="text-transform: uppercase" type="text" name="stuname" style="width:100%;" placeholder="Enter Sur Name" value="<?=$stuname?>"></td>
+							<td style="width:30%">SurName:</td>
+							<td><input  pattern="[^\d]*" required class="form-control" style="text-transform: uppercase" type="text" name="stuname" style="width:100%;" placeholder="Enter Sur Name" value="<?=$stuname?>"></td>
 						</tr>
 						<tr>
 							<td style="width:30%">First Name:</td>
-							<td><input pattern="[^\d]*" required class="form-control" style="text-transform: uppercase" type="text" name="fname" style="width:100%;" placeholder="Enter First Name" value="<?=$fname?>"></td>
+							<td><input  pattern="[^\d]*" required class="form-control" style="text-transform: uppercase" type="text" name="fname" style="width:100%;" placeholder="Enter First Name" value="<?=$fname?>"></td>
 						</tr>
 						<tr>
 							<td style="width:30%">Middle Name:</td>
-							<td><input pattern="[^\d]*" required class="form-control" style="text-transform: uppercase" type="text" name="mname" style="width:100%;" placeholder="Enter Middle Name" value="<?=$mname?>"></td>
+							<td><input  pattern="[^\d]*" required class="form-control" style="text-transform: uppercase" type="text" name="mname" style="width:100%;" placeholder="Enter Middle Name" value="<?=$mname?>"></td>
+						</tr>
+						<tr>
+							<td style="width:30%">NickName:</td>
+							<td><input  pattern="[^\d]*" required class="form-control" style="text-transform: uppercase" type="text" name="nname" style="width:100%;" placeholder="Enter First Name" value="<?=$nname?>"></td>
 						</tr>
 						<tr>
 							<td style="width:30%">Date of Birth:</td>
@@ -483,11 +491,11 @@ p {
 						</tr>
 						<tr>
 						<td style="width:30%">Skills:</td>
-							<td> <input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="skills" value="<?=$skills?>" class="form-control" placeholder="Enter your Skills" required='true'></td>
+							<td> <input  pattern="[^\d]*" style="text-transform: uppercase" type="text" name="skills" value="<?=$skills?>" class="form-control" placeholder="Enter your Skills" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Occupation:</td>
-							<td><input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="occu" value="<?=$occu?>" class="form-control" required='true'></td>
+							<td><input  pattern="[^\d]*" style="text-transform: uppercase" type="text" name="occu" value="<?=$occu?>" class="form-control" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Annual Income:</td>
@@ -523,14 +531,14 @@ p {
 						</tr>
 						<tr>
 						<td style="width:30%">Name of Benefactor, if any:</td>
-							<td> <input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="nob" value="<?=$nob?>" class="form-control" placeholder="Enter the name of your benefactor" required='true'></td>
+							<td> <input  pattern="[^\d]*" style="text-transform: uppercase" type="text" name="nob" value="<?=$nob?>" class="form-control" placeholder="Enter the name of your benefactor" required='true'></td>
 						</tr>
 						<div>
 							<td style="font-weight: bold;"><h5>Family Composition</h5></td>
 							</div>
 					<tr>
 					  <td style="width:30%">Name:</td>
-							<td><input pattern="[^\d]*" style="text-transform: uppercase" type="text" name="fcname" value="<?=$fcname?>" class="form-control" placeholder="Enter Name of Benefactor" required='true'></td>
+							<td><input  pattern="[^\d]*" style="text-transform: uppercase" type="text" name="fcname" value="<?=$fcname?>" class="form-control" placeholder="Enter Name of Benefactor" required='true'></td>
 						</tr>
 						<tr>
 						<td style="width:30%">Relationship:</td>
@@ -587,7 +595,7 @@ p {
 							<td></td>
 							<td>
 							<a href="search-senior-list.php" class="btn btn-danger">Back</a>
-							<button type="submit" name="btnSubmit" class="btn btn-primary">Submit</button>
+								<button type="submit" name="btnSubmit" class="btn btn-primary">Submit</button>
 								<!-- <a href="manage_senior.php" class="btn btn-info">Back to manage senior</a> -->
 							</td>
 						</tr>
@@ -600,7 +608,6 @@ p {
 			</tr>
 		</table>
 		<body>
-
 <!-- The Modal -->
 <div id="myModal1" class="modal1">
   <!-- Modal content -->
@@ -684,6 +691,7 @@ window.onclick = function(event) {
   }
 }
 </script>
+
 </body>
 	</body>
 </html>
