@@ -56,9 +56,8 @@ if (strlen($_SESSION['sturecmsstuid']==0)) {
                     <table border="1" class="table table-bordered mg-b-0">
                       <?php
 $sid=$_SESSION['sturecmsstuid'];
-$sql="SELECT tblsenior.StudentName,tblsenior.StudentEmail,tblsenior.StudentClass,tblsenior.Gender,tblsenior.DOB,tblsenior.StuID,tblsenior.FatherName,tblsenior.MotherName,tblsenior.ContactNumber,tblsenior.AltenateNumber,tblsenior.Address,tblsenior.UserName,tblsenior.Password,tblsenior.Image,tblsenior.DateofAdmission,tblclass.ClassName,tblclass.Section from tblsenior join tblclass on tblclass.ID=tblsenior.StudentClass where tblsenior.StuID=:sid";
+$sql="SELECT * FROM tblsenior";
 $query = $dbh -> prepare($sql);
-$query->bindParam(':sid',$sid,PDO::PARAM_STR);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
 $cnt=1;
@@ -77,8 +76,6 @@ foreach($results as $row)
     <td><?php  echo $row->CitiEmail;?></td>
   </tr>
   <tr class="table-warning">
-     <th>Student Class</th>
-    <td><?php  echo $row->ClassName;?> <?php  echo $row->Section;?></td>
      <th>Gender</th>
     <td><?php  echo $row->Gender;?></td>
   </tr>
@@ -90,9 +87,9 @@ foreach($results as $row)
   </tr>
   <tr class="table-success">
     <th>Father Name</th>
-    <td><?php  echo $row->FatherName;?></td>
+    <td><?php  echo $row->PuAddress;?></td>
     <th>Mother Name</th>
-    <td><?php  echo $row->MotherName;?></td>
+    <td><?php  echo $row->Barangay;?></td>
   </tr>
   <tr class="table-primary">
     <th>Contact Number</th>
@@ -102,7 +99,7 @@ foreach($results as $row)
   </tr>
   <tr class="table-progress">
     <th>Address</th>
-    <td><?php  echo $row->Address;?></td>
+    <td><?php  echo $row->Barangay;?></td>
     <th>User Name</th>
     <td><?php  echo $row->UserName;?></td>
   </tr>
