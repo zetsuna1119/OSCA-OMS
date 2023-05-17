@@ -5,27 +5,41 @@ include('includes/dbconnection.php');
 if (strlen($_SESSION['sturecmsaid']==0)) {
   header('location:logout.php');
   } else{
-   if(isset($_POST['submit']))
-  {
- $nottitle=$_POST['nottitle'];
- $barangayid=$_POST['barangayid'];
- $notmsg=$_POST['notmsg'];
-$sql="insert into tblnotice(NoticeTitle,Barangay,NoticeMsg)values(:nottitle,:barangayid,:notmsg)";
-$query=$dbh->prepare($sql);
-$query->bindParam(':nottitle',$nottitle,PDO::PARAM_STR);
-$query->bindParam(':barangayid',$barangayid,PDO::PARAM_STR);
-$query->bindParam(':notmsg',$notmsg,PDO::PARAM_STR);
- $query->execute();
-   $LastInsertId=$dbh->lastInsertId();
-   if ($LastInsertId>0) {
-    echo '<script>alert("Notice has been added.")</script>';
-echo "<script>window.location.href ='add-notice.php'</script>";
-  }
-  else
-    {
-         echo '<script>alert("Something Went Wrong. Please try again")</script>';
+
+  if (isset($_POST['submit'])) {
+    $barangayid = $_POST['barangayid'];
+
+    $sql = "SELECT ID FROM tblsenior WHERE Barangay = :barangayid";
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':barangayid', $barangayid, PDO::PARAM_STR);
+    $query->execute();
+
+    $nottitle = $_POST['nottitle'];
+    $notmsg = $_POST['notmsg'];
+
+    $sql = "INSERT INTO tblnotice (NoticeTitle, Barangay, NoticeMsg, barangay_id) VALUES (:nottitle, :barangayid, :notmsg, :brgy_id)";
+    $insertQuery = $dbh->prepare($sql);
+    $insertQuery->bindParam(':nottitle', $nottitle, PDO::PARAM_STR);
+    $insertQuery->bindParam(':barangayid', $barangayid, PDO::PARAM_STR);
+    $insertQuery->bindParam(':notmsg', $notmsg, PDO::PARAM_STR);
+
+    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+        $seniorID = $row['ID'];
+        $insertQuery->bindParam(':brgy_id', $seniorID, PDO::PARAM_STR);
+        $insertQuery->execute();
+
+        $lastInsertId = $dbh->lastInsertId();
+        if ($lastInsertId > 0) {
+            echo '<script>alert("Notice has been added.")</script>';
+        } else {
+            echo '<script>alert("Something Went Wrong. Please try again")</script>';
+        }
     }
+
+    echo "<script>window.location.href = 'add-notice.php'</script>";
 }
+
+
   ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -83,8 +97,8 @@ echo "<script>window.location.href ='add-notice.php'</script>";
                      
                       <div class="form-group">
                         <label for="exampleInputEmail3">Notice For</label>
-                        <select  name="barangayid" class="form-control" required='true'>
-                        <option value="">Select Barangay</option>
+                        <select id="barangaySelect" name="barangayid" class="form-control" required='true'>
+                          <option value="">Select Barangay</option>
                           <option value="Abachanan">Abachanan</option>
                           <option value="Anibongan">Anibongan</option>
                           <option value="Bugsok">Bugsok</option>
@@ -109,6 +123,9 @@ echo "<script>window.location.href ='add-notice.php'</script>";
                           <option value="Villa Garcia">Villa Garcia</option>
                         </select>
                       </div>
+                      <!-- <div>
+                        <input id="barangayValue" type="text" name="brgy_id">
+                      </div> -->
                       <div class="form-group">
                         <label for="exampleInputName1">Notice Message</label>
                         <textarea name="notmsg" value="" class="form-control" required='true'></textarea>
@@ -139,6 +156,17 @@ echo "<script>window.location.href ='add-notice.php'</script>";
     <script src="vendors/select2/select2.min.js"></script>
     <script src="vendors/typeahead.js/typeahead.bundle.min.js"></script>
     <!-- End plugin js for this page -->
+
+    <!-- value selector -->
+    <!-- <script>
+    $(document).ready(function() {
+      $('#barangaySelect').change(function() {
+        var selectedValue = $('#barangaySelect').val();
+        $('#barangayValue').val(selectedValue);
+      });
+    });
+    </script> -->
+
     <!-- inject:js -->
     <script src="js/off-canvas.js"></script>
     <script src="js/misc.js"></script>
@@ -148,4 +176,5 @@ echo "<script>window.location.href ='add-notice.php'</script>";
     <script src="js/select2.js"></script>
     <!-- End custom js for this page -->
   </body>
-</html><?php }  ?>
+</html>
+<?php } ?>
