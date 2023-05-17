@@ -41,7 +41,7 @@ include('includes/dbconnection.php');
 </head>
 	<body>
 <?php include_once('includes/header.php');?>
-<div class="banner">
+<div class="bannerist">
   <div class="container">
   <script src="js/responsiveslides.min.js"></script>
  <script>
@@ -56,7 +56,7 @@ include('includes/dbconnection.php');
     });
   </script>
                   <div class="tunga">
-                      <div class="">
+                      <div>
                       <img src="images/sierralogo.jpg" alt= "Avatar">
                       </div>
                   </div>
@@ -68,6 +68,13 @@ include('includes/dbconnection.php');
         <ul class="rslides" id="slider">
          <li>     
   <style>
+    .bannerist{
+	background:url(images/senior.jpeg);
+	background-size:cover;
+	min-height:650px;
+	padding-top:0em !important;
+	text-align:center;
+}
   h17{
     color: #FFFFFF;
     text-shadow: 2px 4px 4px #E91E63;
@@ -76,7 +83,7 @@ include('includes/dbconnection.php');
     font-size: 40px;
     }
   h16{
-    color: #000000;
+    color: #ffffff;
     font-weight: bold;
     position: absolute;
     bottom: 185px;
@@ -126,7 +133,7 @@ include('includes/dbconnection.php');
          <a href="user/login.php" button class="bttn"><span>Login Here!</span></a>
         
           
-           <p style="color: #000000; font-weight: bold;">Not registered yet? You can register here!</p>             
+           <p style="color: #ffffff; font-weight: bold;">Not registered yet? You can register here!</p>             
           <div class="readmore">
           <a href="user/online-registration-form.php">Fill up here to Register!<i class="glyphicon glyphicon-menu-right"> </i></a>
           </div> 

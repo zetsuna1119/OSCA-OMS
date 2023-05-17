@@ -35,7 +35,7 @@ foreach($results as $row)
       <?php $cnt=$cnt+1;}} ?></div>
       <div class="col-md-3 footer-right">
         <h3>Office of the Senior Citizen Affairs (OSCA)</h3>
-        <p>Proin eget ipsum ultrices, aliquet velit eget, tempus tortor. Phasellus non velit sit amet diam faucibus molestie tincidunt efficitur nisi.</p>
+        <p>We are always welcome you! Feel free to go on our office everytime. Thank you.</p>
       </div>
       <div class="clearfix"> </div> 
     </div>
@@ -47,7 +47,7 @@ foreach($results as $row)
     <!-- container -->
     <div class="container">
       <div class="copyright-left">
-      <p>© <?php echo date('Y');?> Senior Citizen Profiling Manangement System </p>
+      <p>© <?php echo date('Y');?> OSCA Online Management System </p>
       </div>
       <div class="copyright-right">
         <ul>

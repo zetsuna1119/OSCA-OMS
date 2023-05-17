@@ -72,7 +72,7 @@ if (strlen($_SESSION['sturecmsstuid']==0)) {
             ?>
             <tr align="center" class="table-warning">
                 <td colspan="4" style="font-size:20px;color:blue">
-                    Notice for Barangay <?php echo $row->Address; ?></td>
+                    Notice for Barangay <?php echo $row->Barangay; ?></td>
             </tr>
             <tr class="table-info">
                 <th>Notice Announced Date</th>
