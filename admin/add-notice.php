@@ -5,40 +5,44 @@ include('includes/dbconnection.php');
 if (strlen($_SESSION['sturecmsaid']==0)) {
   header('location:logout.php');
   } else{
-
-  if (isset($_POST['submit'])) {
-    $barangayid = $_POST['barangayid'];
-
-    $sql = "SELECT ID FROM tblsenior WHERE Barangay = :barangayid";
-    $query = $dbh->prepare($sql);
-    $query->bindParam(':barangayid', $barangayid, PDO::PARAM_STR);
-    $query->execute();
-
-    $nottitle = $_POST['nottitle'];
-    $notmsg = $_POST['notmsg'];
-
-    $sql = "INSERT INTO tblnotice (NoticeTitle, Barangay, NoticeMsg, barangay_id) VALUES (:nottitle, :barangayid, :notmsg, :brgy_id)";
-    $insertQuery = $dbh->prepare($sql);
-    $insertQuery->bindParam(':nottitle', $nottitle, PDO::PARAM_STR);
-    $insertQuery->bindParam(':barangayid', $barangayid, PDO::PARAM_STR);
-    $insertQuery->bindParam(':notmsg', $notmsg, PDO::PARAM_STR);
-
-    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-        $seniorID = $row['ID'];
-        $insertQuery->bindParam(':brgy_id', $seniorID, PDO::PARAM_STR);
-        $insertQuery->execute();
-
-        $lastInsertId = $dbh->lastInsertId();
-        if ($lastInsertId > 0) {
-            echo '<script>alert("Notice has been added.")</script>';
-        } else {
-            echo '<script>alert("Something Went Wrong. Please try again")</script>';
+    
+    if (isset($_POST['submit'])) {
+        $barangayid = $_POST['barangayid'];
+    
+        $sql = "SELECT ID FROM tblsenior WHERE Barangay = :barangayid";
+        $query = $dbh->prepare($sql);
+        $query->bindParam(':barangayid', $barangayid, PDO::PARAM_STR);
+        $query->execute();
+    
+        $nottitle = $_POST['nottitle'];
+        $notmsg = $_POST['notmsg'];
+    
+        $sql = "INSERT INTO tblnotice (NoticeTitle, Barangay, NoticeMsg, barangay_id) VALUES (:nottitle, :barangayid, :notmsg, :brgy_id)";
+        $insertQuery = $dbh->prepare($sql);
+        $insertQuery->bindParam(':nottitle', $nottitle, PDO::PARAM_STR);
+        $insertQuery->bindParam(':barangayid', $barangayid, PDO::PARAM_STR);
+        $insertQuery->bindParam(':notmsg', $notmsg, PDO::PARAM_STR);
+    
+        $alertShown = false; // Flag variable to track if alert has been shown
+    
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            $seniorID = $row['ID'];
+            $insertQuery->bindParam(':brgy_id', $seniorID, PDO::PARAM_STR);
+            $insertQuery->execute();
+    
+            $lastInsertId = $dbh->lastInsertId();
+            if ($lastInsertId > 0 && !$alertShown) {
+                echo '<script>alert("Notice has been added.")</script>';
+                $alertShown = true; // Set flag to true after showing the alert
+            } else {
+                // Handle any error condition here if necessary
+            }
         }
+    
+        echo "<script>window.location.href = 'add-notice.php'</script>";
     }
 
-    echo "<script>window.location.href = 'add-notice.php'</script>";
-}
-
+    
 
   ?>
 <!DOCTYPE html>
