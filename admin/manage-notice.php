@@ -6,18 +6,36 @@ if (strlen($_SESSION['sturecmsaid']==0)) {
   header('location:logout.php');
   } else{
    // Code for deletion
-if(isset($_GET['delid']))
-{
-$rid=intval($_GET['delid']);
-$sql="delete from tblnotice where ID=:rid";
-$query=$dbh->prepare($sql);
-$query->bindParam(':rid',$rid,PDO::PARAM_STR);
-$query->execute();
- echo "<script>alert('Data deleted');</script>"; 
-  echo "<script>window.location.href = 'manage-notice.php'</script>";     
+   if (isset($_GET['delid'])) {
+    $rid = intval($_GET['delid']);
+    
+    // Get the value of the "barangay" column for the selected row
+    $sql = "SELECT barangay FROM tblnotice WHERE ID = :rid";
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':rid', $rid, PDO::PARAM_INT);
+    $query->execute();
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    
+    if ($result) {
+        $barangay = $result['barangay'];
 
+        // Delete all rows with matching "barangay" value
+        $sql = "DELETE FROM tblnotice WHERE barangay = :barangay";
+        $query = $dbh->prepare($sql);
+        $query->bindParam(':barangay', $barangay, PDO::PARAM_STR);
+        $query->execute();
+        
+        // Delete all corresponding IDs
+        $sql = "DELETE FROM tblnotice WHERE ID = :rid";
+        $query = $dbh->prepare($sql);
+        $query->bindParam(':rid', $rid, PDO::PARAM_INT);
+        $query->execute();
 
+        echo "<script>alert('Data deleted');</script>"; 
+        echo "<script>window.location.href = 'manage-notice.php'</script>";
+    }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -81,43 +99,58 @@ $query->execute();
                           </tr>
                         </thead>
                         <tbody>
-                           <?php
-                           if (isset($_GET['pageno'])) {
-            $pageno = $_GET['pageno'];
-        } else {
-            $pageno = 1;
-        }
-        // Formula for pagination
-        $no_of_records_per_page =15;
-        $offset = ($pageno-1) * $no_of_records_per_page;
-       $ret = "SELECT ID FROM tblnotice";
-$query1 = $dbh -> prepare($ret);
+<?php
+$previousBarangay = null; // Variable to store the previous Barangay value
+if (isset($_GET['pageno'])) {
+    $pageno = $_GET['pageno'];
+} else {
+    $pageno = 1;
+}
+// Formula for pagination
+$no_of_records_per_page = 15;
+$offset = ($pageno - 1) * $no_of_records_per_page;
+$ret = "SELECT ID FROM tblnotice";
+$query1 = $dbh->prepare($ret);
 $query1->execute();
-$results1=$query1->fetchAll(PDO::FETCH_OBJ);
-$total_rows=$query1->rowCount();
+$results1 = $query1->fetchAll(PDO::FETCH_OBJ);
+$total_rows = $query1->rowCount();
 $total_pages = ceil($total_rows / $no_of_records_per_page);
-$sql="SELECT * FROM tblnotice LIMIT $offset, $no_of_records_per_page";
-$query = $dbh -> prepare($sql);
+$sql = "SELECT * FROM tblnotice LIMIT $offset, $no_of_records_per_page";
+$query = $dbh->prepare($sql);
 $query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
+$results = $query->fetchAll(PDO::FETCH_OBJ);
 
-$cnt=1;
-if($query->rowCount() > 0)
-{
-foreach($results as $row)
-{               ?>   
-                          <tr>
-                           
-                            <td><?php echo htmlentities($cnt);?></td>
-                            <td><?php  echo htmlentities($row->NoticeTitle);?></td>
-                            <td><?php  echo htmlentities($row->Barangay);?></td>
-                            <td><?php  echo htmlentities($row->CreationDate);?></td>
-                            <td>
-                              <div><a href="edit-notice-detail.php?editid=<?php echo htmlentities ($row->ID);?>"><i class="icon-eye"></i></a>
-                                                || <a href="manage-notice.php?delid=<?php echo ($row->ID);?>" onclick="return confirm('Do you really want to Delete ?');"> <i class="icon-trash"></i></a></div>
-                            </td> 
-                          </tr><?php $cnt=$cnt+1;}} ?>
-                        </tbody>
+$cnt = 1;
+if ($query->rowCount() > 0) {
+    foreach ($results as $row) {
+        if ($previousBarangay !== $row->Barangay) { // Compare with previous Barangay value
+            $previousBarangay = $row->Barangay;
+            ?>
+            <tr>
+                <td><?php echo htmlentities($cnt); ?></td>
+                <td><?php echo htmlentities($row->NoticeTitle); ?></td>
+                <td><?php echo htmlentities($row->Barangay); ?></td>
+                <td><?php echo htmlentities($row->CreationDate); ?></td>
+                <td>
+                    <div>
+                        <a href="edit-notice-detail.php?editid=<?php echo htmlentities($row->ID); ?>">
+                            <i class="icon-eye"></i>
+                        </a>
+                        || <a href="manage-notice.php?delid=<?php echo ($row->ID); ?>"
+                              onclick="return confirm('Do you really want to Delete ?');">
+                            <i class="icon-trash"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            <?php
+        }
+        $cnt = $cnt + 1;
+    }
+}
+?>
+</tbody>
+
                       </table>
                     </div>
                    <div align="left">

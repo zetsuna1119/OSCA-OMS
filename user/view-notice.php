@@ -52,42 +52,53 @@ if (strlen($_SESSION['sturecmsstuid']==0)) {
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    
-                    <table border="1" class="table table-bordered mg-b-0">
-                      <?php
-                      
-$sql="SELECT * FROM tblnotice  ORDER BY `CreationDate` DESC";
-$query = $dbh -> prepare($sql);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
-$cnt=1;
-if($query->rowCount() > 0)
-{
-foreach($results as $row)
-{               ?>
- <tr align="center" class="table-warning">
-<td colspan="4" style="font-size:20px;color:blue">
- Notice for Barangay  <?php echo $row->Barangay; ?></td></tr>
-<tr class="table-info">
-    <th>Notice Announced Date</th>
-    <td><?php  echo $row->CreationDate;?></td>
-  </tr>
-    <tr class="table-info">
-    <th>Noitice Title</th>
-    <td style="font-size:20px;color:blue"><?php  echo $row->NoticeTitle;?></td>
-  </tr>
-  <tr class="table-info">
-  <th>Message</th>
-  <td><textarea name="message" rows="8" cols="60"><?php echo $row->NoticeMsg; ?></textarea></td>
-</tr>
 
-  
-  <?php $cnt=$cnt+1;}} else { ?>
-<tr>
-  <th colspan="2" style="color:red;">No Notice Found</th>
-</tr>
-  <?php } ?>
+                    
+                  <table border="1" class="table table-bordered mg-b-0">
+    <?php
+
+    $notice = $_SESSION['sturecmsuid'];
+
+    $sql = "SELECT tblnotice.*, tblsenior.Barangay
+    FROM tblnotice
+    INNER JOIN tblsenior ON tblnotice.barangay_id = tblsenior.ID WHERE tblnotice.barangay_id = $notice";
+    
+    $query = $dbh->prepare($sql);
+    $query->execute();
+    $results = $query->fetchAll(PDO::FETCH_OBJ);
+    $cnt = 1;
+    if ($query->rowCount() > 0) {
+        foreach ($results as $row) {
+            ?>
+            <tr align="center" class="table-warning">
+                <td colspan="4" style="font-size:20px;color:blue">
+                    Notice for Barangay <?php echo $row->Barangay; ?></td>
+            </tr>
+            <tr class="table-info">
+                <th>Notice Announced Date</th>
+                <td><?php echo $row->CreationDate; ?></td>
+            </tr>
+            <tr class="table-info">
+                <th>Notice Title</th>
+                <td style="font-size:20px;color:blue"><?php echo $row->NoticeTitle; ?></td>
+            </tr>
+            <tr class="table-info">
+                <th>Message</th>
+                <td><textarea style="padding-left: 10px; padding-top: 10px; font-weight: bold; text-transform: uppercase; border-radius: 10px;" name="message" rows="8" cols="60"><?php echo $row->NoticeMsg; ?></textarea></td>
+            </tr>
+            <?php
+            $cnt = $cnt + 1;
+        }
+    } else { ?>
+        <tr>
+            <th colspan="2" style="color:red;">No Notice Found</th>
+        </tr>
+    <?php } ?>
 </table>
+
+
+
+
                   </div>
                 </div>
               </div>

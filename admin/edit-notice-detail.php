@@ -8,12 +8,14 @@ if (strlen($_SESSION['sturecmsaid']==0)) {
    if(isset($_POST['submit']))
   {
  $nottitle=$_POST['nottitle'];
+ $barangay=$_POST['barangay'];
  $barangayid=$_POST['barangayid'];
  $notmsg=$_POST['notmsg'];
  $eid=$_GET['editid'];
-$sql="update tblnotice set NoticeTitle=:nottitle,Barangay=:barangayid, NoticeMsg=:notmsg where ID=:eid";
+$sql="update tblnotice set NoticeTitle=:nottitle,Barangay=:barangay,Barangay=:barangayid, NoticeMsg=:notmsg where ID=:eid";
 $query=$dbh->prepare($sql);
 $query->bindParam(':nottitle',$nottitle,PDO::PARAM_STR);
+$query->bindParam(':barangay',$barangay,PDO::PARAM_STR);
 $query->bindParam(':barangayid',$barangayid,PDO::PARAM_STR);
 $query->bindParam(':notmsg',$notmsg,PDO::PARAM_STR);
 $query->bindParam(':eid',$eid,PDO::PARAM_STR);
@@ -55,20 +57,19 @@ $query->bindParam(':eid',$eid,PDO::PARAM_STR);
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title">Update Notice </h3>
+              <h3 class="page-title">View Notice </h3>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
-                  <li class="breadcrumb-item active" aria-current="page"> Update Notice</li>
+                  <li class="breadcrumb-item active" aria-current="page"> View Notice</li>
                 </ol>
               </nav>
             </div>
             <div class="row">
-          
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title" style="text-align: center;">Update Notice</h4>
+                    <h4 class="card-title" style="text-align: center;">View Notice Details</h4>
                    
                     <form class="forms-sample" method="post" enctype="multipart/form-data">
                       <?php
@@ -85,13 +86,17 @@ foreach($results as $row)
 {               ?>
                       <div class="form-group">
                         <label for="exampleInputName1">Notice Title</label>
-                        <input type="text" name="nottitle" value="<?php  echo htmlentities($row->NoticeTitle);?>" class="form-control" required='true'>
+                        <input type="text" name="nottitle" value="<?php  echo htmlentities($row->NoticeTitle);?>" class="form-control" required='true' disabled>
                       </div>
-                     
+                      <div class="form-group">
+                        <label for="exampleInputName1">Notice For Barangay</label>
+                        <input type="text" value="<?php echo strtoupper(htmlentities($row->Barangay)); ?>" class="form-control" required="true" style="text-transform: uppercase;" disabled>
+                      </div>
+<!--                      
                       <div class="form-group">
                         <label for="exampleInputEmail3">Notice For</label>
                         <select  name="barangayid" class="form-control">
-                          <option value="<?php  echo htmlentities($row->Barangay);?>"></option>
+                          <option value=""></option>
                           <option value="Abachanan">Abachanan</option>
                           <option value="Anibongan">Anibongan</option>
                           <option value="Bugsok">Bugsok</option>
@@ -115,14 +120,13 @@ foreach($results as $row)
                           <option value="Santa Cruz">Santa Cruz</option>
                           <option value="Villa Garcia">Villa Garcia</option>
                         </select>
-                      </div>
+                      </div> -->
                       <div class="form-group">
                         <label for="exampleInputName1">Notice Message</label>
-                        <textarea name="notmsg" value="" class="form-control" required='true'><?php  echo htmlentities($row->NoticeMsg);?></textarea>
+                        <textarea name="notmsg" class="form-control" required="true" style="height: 100px; font-size: 15px;" disabled><?php echo htmlentities($row->NoticeMsg); ?></textarea>
                       </div>
                    <?php $cnt=$cnt+1;}} ?>
-                      <button type="submit" class="btn btn-primary mr-2" name="submit">Update</button>
-                     
+                   <a href="manage-notice.php" class="btn btn-danger mr-2 float-right" >Back</a>
                     </form>
                   </div>
                 </div>

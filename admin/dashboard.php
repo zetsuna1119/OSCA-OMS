@@ -294,7 +294,7 @@ document.getElementById('myChart').style.height = '400px';
                   <div class="row">
                     <div class="col-md-12">
                       <div class="card" style="border: 2px solid #ccc;">
-                        <div class="card-header">Age Range Bar Charts</div>
+                        <div class="card-header">Senior Age Range</div>
                         <div class="card-body" style="border: 2px solid #ccc;">
                         <canvas id="ageChart"></canvas>
                         <?php
@@ -304,13 +304,13 @@ $stmt = $dbh->query($query);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Create arrays to store the count of age ranges and labels
 $ageRanges = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-$ageLabels = array('55-60', '61-65', '66-70', '71-75', '76-80', '81-85', '86-90', '91-95', '96-100', '101-105', '105-110', '110-115', '116-120', '121-125', '126-130');
+$ageLabels = array('AGE', '60-65', '66-70', '71-75', '76-80', '81-85', '86-90', '91-95', '96-100', '101-105', '105-110', '110-115', '116-120');
 // Count the number of each age range
 foreach ($data as $row) {
     $age = $row['Age'];
     if ($age >= 55 && $age < 60) {
         $ageRanges[0]++;
-    } elseif ($age >= 61 && $age < 65) {
+    } elseif ($age >= 60 && $age < 65) {
         $ageRanges[1]++;
     } elseif ($age >= 66 && $age < 70) {
         $ageRanges[2]++;
@@ -334,10 +334,6 @@ foreach ($data as $row) {
         $ageRanges[11]++;
     } elseif ($age >= 116 && $age <= 120) {
         $ageRanges[12]++;
-    }  elseif ($age >= 121 && $age <= 125) {
-        $ageRanges[13]++;
-    } elseif ($age >= 126 && $age <= 130) {
-        $ageRanges[14]++;
     }
 }
 // Create a bar chart using Chart.js
