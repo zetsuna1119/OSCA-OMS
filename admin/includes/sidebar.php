@@ -119,18 +119,19 @@ $totalpending=$query1->rowCount();
                 <i class="icon-notebook menu-icon"></i>
               </a>
             </li>
-            <!-- <li class="nav-item">
+
+            <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic1">
                 <span class="menu-title">Benefits</span>
                 <i class="icon-people menu-icon"></i>
               </a>
               <div class="collapse" id="ui-basic2">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="add_employee.php">Pension</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="senior-birthday.php">Who's birthday?</a></li>
                   <li class="nav-item"> <a class="nav-link" href="#">Who's birthday?</a></li>
                 </ul>
               </div>
-            </li> -->
+            </li>
 
             <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">

@@ -304,7 +304,7 @@ $stmt = $dbh->query($query);
 $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Create arrays to store the count of age ranges and labels
 $ageRanges = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-$ageLabels = array('AGE', '60-65', '66-70', '71-75', '76-80', '81-85', '86-90', '91-95', '96-100', '101-105', '105-110', '110-115', '116-120');
+$ageLabels = array('AGE', '60-65', '66-70', '71-75', '76-80', '81-85', '86-90', '91-95', '96-100', '101-105', '105-110', '110-115');
 // Count the number of each age range
 foreach ($data as $row) {
     $age = $row['Age'];
@@ -332,8 +332,6 @@ foreach ($data as $row) {
         $ageRanges[10]++;
     } elseif ($age >= 111 && $age <= 115) {
         $ageRanges[11]++;
-    } elseif ($age >= 116 && $age <= 120) {
-        $ageRanges[12]++;
     }
 }
 // Create a bar chart using Chart.js
