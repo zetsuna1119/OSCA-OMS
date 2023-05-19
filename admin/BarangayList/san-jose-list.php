@@ -8,6 +8,7 @@ class PDF extends FPDF {
     function Header() {
         $this->SetFont('Arial', 'B', 10);
         $this->SetMargins(5, 10, 10);
+        $date = date('F j, Y');
         $this->SetFillColor(255, 255, 255);
         $this->Cell(0, 5, 'PROVINCE of BOHOL', 0, 0, 'C');
         $this->Ln();
@@ -17,7 +18,7 @@ class PDF extends FPDF {
         $this->Ln();
         $this->Cell(0, 5, 'BARANGAY SAN JOSE', 0, 0, 'C');
         $this->Ln();
-        $this->Cell(0, 5, 'As of _________________20____', 0, 0, 'C');
+        $this->Cell(0, 5, 'As of '.$date, 0, 0, 'C');
         $this->Ln();
         $this->SetFont('Times', '', 9);
         $this->Cell(8, 10, 'No.', 1, 0, 'C');
