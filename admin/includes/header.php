@@ -19,7 +19,7 @@ if($query->rowCount() > 0)
 foreach($results as $row)
 {               ?>
         <div class="navbar-menu-wrapper d-flex align-items-center flex-grow-1">
-          <h5 class="mb-0 font-weight-medium d-none d-lg-flex"><?php  echo htmlentities($row->AdminName);?> Welcome dashboard!</h5>
+          <h5 class="mb-0 font-weight-medium d-none d-lg-flex"><?php  echo htmlentities($row->AdminName);?> Welcome Dashboard!</h5>
           <ul class="navbar-nav navbar-nav-right ml-auto">
             <li class="nav-item dropdown d-none d-xl-inline-flex user-dropdown">
               <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
