@@ -51,12 +51,86 @@ $query->execute();
         <!-- partial:partials/_sidebar.html -->
         <?php include_once('includes/sidebar.php');?>
         <!-- partial -->
+
+<style>
+  input[type=text] {
+    width: 50%;
+    padding: 10px 20px;
+    margin: 8px 0px;
+    box-sizing: border-box;
+    border: 2px solid #1fd655;
+    border-radius: 10px;
+  }
+  .bttnclick {
+    padding: 10px 15px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    margin-left: 20px;
+    background-color: #1fd655;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 9px #999;
+  }
+  .bttnclick:hover {
+    background-color: #242424;
+    color: #1fd655;
+  }
+  .bttnclick:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translate(4px);
+  }
+  .bttnimport {
+    position: relative;
+    border-radius: 10px;
+    background-color: #1fd655;
+    margin-left: auto;
+    margin-right: 30px;
+    border: none;
+    display: inline-block;
+    font-size: 18px;
+    color: #FFFFFF;
+    padding: 10px;
+    width: 150px;
+    text-align: center;
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .bttnimport {
+   background-color:#3A9BDC;
+   color: #FFFFFF;
+  }
+  .bttnimport:hover {
+    background-color: #1fd655;
+    color: #FFFFFF;
+  }
+  .strupper{
+        text-transform: uppercase;
+      }
+    .sers{
+      font-size: 18px;
+    }
+    select[type=text] {
+    width: 50%;
+    padding: 5px 18px;
+    margin: 8px 0px;
+    box-sizing: border-box;
+    border: 1px solid #1fd655;
+    border-radius: 5px;
+  }
+</style>
+
         <div class="main-panel">
           <div class="content-wrapper">
              <div class="page-header">
               <div class="sers">
              <label for="ser">Generate Reports</label>
-            </div>
+              </div>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
@@ -68,8 +142,11 @@ $query->execute();
               <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
+                      <form method="post">
                     
-
+                      </form>
+        
+                    
                   </div>
                 </div>
               </div>
