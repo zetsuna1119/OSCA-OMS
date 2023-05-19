@@ -36,6 +36,52 @@ if (strlen($_SESSION['sturecmsaid']==0)) {
       .strupper{
         text-transform: uppercase;
       }
+      .search-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px 20px;
+}
+
+.search-container form {
+  display: flex;
+  align-items: center;
+}
+
+.search-container input[type="text"] {
+  width: 200px;
+}
+
+@media screen and (max-width: 768px) {
+  .search-container {
+    justify-content: center;
+  }
+  
+  .search-container form {
+    flex-wrap: wrap;
+  }
+  
+  .search-container input[type="text"] {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .search-container button[type="submit"] {
+    width: 100%;
+  }
+}
+
+  input[name="search"] {
+  width: 50px;
+  margin-right: 5px;
+  box-sizing: border-box;
+    border: 2px solid #1fd655;
+}
+.dropdown-item:focus, .dropdown-item:hover {
+  background-color: #1fd655;
+}
+.dropdown-item {
+  background-color: skyblue;
+}
     </style>
     <div class="container-scroller">
       <!-- partial:partials/_navbar.html -->
@@ -60,9 +106,39 @@ if (strlen($_SESSION['sturecmsaid']==0)) {
               <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <div class="d-sm-flex align-items-center mb-4">
+                    <div class="d-sm-flex align-items-left mb-4">
                       <a href="add-students.php" class="btn btn-sm btn-primary"><i class="icon-plus"></i> Add New Senior</a>
                     </div>
+<!-- Add JavaScript/jQuery code for handling the search and "Show Entries" functionality -->
+<!-- <script>
+  // Handle search form submission
+  $('form').submit(function(e) {
+    e.preventDefault();
+    var searchQuery = $('input[name="search"]').val();
+    window.location.href = '?search=' + searchQuery;
+  });
+
+  // Handle "Show Entries" dropdown change
+  $('#show-entries').change(function() {
+    var selectedValue = $(this).val();
+    window.location.href = '?show_entries=' + selectedValue;
+  });
+</script> -->
+<div class="search-container">
+  <form action=""  method="GET">
+    <input type="text" name="search" placeholder="Search by SurName..." required='true'>
+    <button  class="btn btn-sm btn-primary" type="submit">Search</button>
+</div>                
+<!-- Add a "Show Entries" dropdown -->
+<!-- <div class="entries-container">
+  <label>Show Entries:</label>
+  <select id="show-entries" name="show_entries">
+    <option value="20">20</option>
+    <option value="50">50</option>
+    <option value="100">100</option>
+  </select>
+</div> -->
+     <!-- Add a search form -->
                     <div class="table-responsive border rounded p-1">
                       <table class="table">
                         <thead>
@@ -77,61 +153,82 @@ if (strlen($_SESSION['sturecmsaid']==0)) {
                             <th class="font-weight-bold">Action</th>
                           </tr>
                         </thead>
-                        <tbody>
-                        <?php
-                        //get page number
-                        if(isset($_GET['page_no']) && $_GET['page_no'] !==""){
-                          $page_no = $_GET['page_no'];
-                        }else{
-                          $page_no = 1;
-                        }
-                        //total rows or records to display
-                        $total_records_per_page = 20;
-                        //get the page offset for the limit query
-                        $offset = ($page_no - 1) * $total_records_per_page;
-                        //get previous page
-                        $previous_page = $page_no - 1;
-                        //get the next page
-                        $next_page = $page_no +1;
-                        //get the total count of records
-                         $result_count = mysqli_query($con, "SELECT COUNT(*) as total_records FROM tblsenior");
-                        //total records
-                         $records = mysqli_fetch_array($result_count);
-                        //store total records to avariable
-                         $total_records = $records['total_records'];
-                        //get total pages
-                         $total_no_of_pages = ceil($total_records / $total_records_per_page);
+                      <tbody>
+<?php
+// Get page number
+if(isset($_GET['page_no']) && $_GET['page_no'] !==""){
+  $page_no = $_GET['page_no'];
+}else{
+  $page_no = 1;
+}
+// Get total records per page
+if(isset($_GET['show_entries']) && $_GET['show_entries'] !== ""){
+  $total_records_per_page = $_GET['show_entries'];
+}else{
+  $total_records_per_page = 50; // Default value
+}
 
-              $counter = 1;
-							$stmt = $mysqli->prepare("SELECT `id`, `StuID`, `SurName`, `FirstName`, `MiddleName`, `Barangay`, `Gender`, `Age`, `DateofAdmission` FROM `tblsenior` ORDER BY `SurName`, `FirstName`, `MiddleName` ASC LIMIT $offset, $total_records_per_page");
-							$stmt->execute();
-							$stmt->store_result();
-							if( $stmt->num_rows > 0 ) {
-								$stmt->bind_result($id, $stuid, $stuname, $fname, $mname, $barangay, $gender, $age, $DateofAdmission );
-								while( $stmt->fetch() ) {
+// Get the page offset for the limit query
+$offset = ($page_no - 1) * $total_records_per_page;
 
-                            ?>   
-                          <tr>
-                          <td><?=$counter?></td>          
-                          <td><?=$stuid?></td>
-								          <td class="strupper"><?=$stuname?>, <?=$fname?> <?=$mname?></td>
-								          <td class="strupper"><?=$barangay?></td>
-								          <td class="strupper"><?=$gender?></td>
-                          <td><?=$age?></td>
-								          <td><?=$DateofAdmission?></td>
-								              <td align="center">
-									            <a href="edit-senior.php?id=<?=$id?>" class="btn btn-sm btn-success"><i class="fa fa-edit"></i> Edit</a>
-									            <a href="delete_employee.php?id=<?=$id?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete?')"><i class="fa fa-trash"></i> Delete</a>
-								              <a href="Generate-id.php?id=<?=$id?>" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i>Generate ID</a>
-                            </td>
-							      </tr>
-                    <?php $counter++;?>
-						<?php } } else {?>
-						 <tr>
-								<td colspan="5" align="center">No Senior found.</td>
-							</tr>
-							<?php } ?>
-                        </tbody>
+// Get previous page
+$previous_page = $page_no - 1;
+
+// Get the next page
+$next_page = $page_no + 1;
+
+// Get the total count of records
+$result_count = mysqli_query($con, "SELECT COUNT(*) as total_records FROM tblsenior");
+$records = mysqli_fetch_array($result_count);
+$total_records = $records['total_records']; // Store total records to a variable
+
+// Get total pages
+$total_no_of_pages = ceil($total_records / $total_records_per_page);
+
+$counter = 1;
+$search = isset($_GET['search']) ? $_GET['search'] : ''; // Get the search query
+
+$stmt = $mysqli->prepare("SELECT `id`, `StuID`, `SurName`, `FirstName`, `MiddleName`, `Barangay`, `Gender`, `Age`, `DateofAdmission` FROM `tblsenior` WHERE `SurName` LIKE '%$search%' OR `MiddleName` LIKE '%$search%' OR `FirstName` LIKE '%$search%' ORDER BY `SurName`, `FirstName`, `MiddleName` ASC LIMIT $offset, $total_records_per_page");
+$stmt->execute();
+$stmt->store_result();
+
+if ($stmt->num_rows > 0) {
+  $stmt->bind_result($id, $stuid, $stuname, $fname, $mname, $barangay, $gender, $age, $DateofAdmission);
+
+  while ($stmt->fetch()) {
+    ?>
+    <tr>
+      <td><?=$counter?></td>
+      <td><?=$stuid?></td>
+      <td class="strupper"><?=$stuname?>, <?=$fname?> <?=$mname?></td>
+      <td class="strupper"><?=$barangay?></td>
+      <td class="strupper"><?=$gender?></td>
+      <td><?=$age?></td>
+      <td><?=$DateofAdmission?></td>
+      <td align="center">
+  <div class="dropdown">
+    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="edit-senior.php?id=<?=$id?>"><i class="fa fa-edit"></i> Edit</a>
+      <a class="dropdown-item" href="delete_employee.php?id=<?=$id?>" onclick="return confirm('Are you sure you want to delete?')"><i class="fa fa-trash"></i> Delete</a>
+      <a class="dropdown-item" href="Generate-id.php?id=<?=$id?>"><i class="fa fa-edit"></i> Generate ID</a>
+    </div>
+  </div>
+</td>
+
+    </tr>
+    <?php
+    $counter++;
+  }
+} else {
+?>
+  <tr>
+    <td colspan="8" align="center">No Senior found.</td>
+  </tr>
+<?php } ?>
+</tbody>
+
                       </table>
                     </div>
                     <div>

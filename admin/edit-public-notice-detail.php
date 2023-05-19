@@ -17,6 +17,7 @@ $query->bindParam(':notmsg',$notmsg,PDO::PARAM_STR);
 $query->bindParam(':eid',$eid,PDO::PARAM_STR);
  $query->execute();
   echo '<script>alert("Notice has been updated")</script>';
+  echo "<script>window.location.href = 'manage-public-notice.php'</script>";
 }
 
   ?>

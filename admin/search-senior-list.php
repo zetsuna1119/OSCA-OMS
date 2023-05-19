@@ -108,6 +108,13 @@ $query->execute();
   .strupper{
         text-transform: uppercase;
       }
+.dropdown-item:focus, .dropdown-item:hover {
+  background-color: #1fd655;
+}
+.dropdown-item {
+  background-color: skyblue;
+}
+   
 </style>
 
         <div class="main-panel">
@@ -127,7 +134,7 @@ $query->execute();
                   <div class="card-body">
                     <form method="post">
                                 <div class="form-group">
-                                   <strong>Search Registered Seniors in Barangay:</strong>
+                                   <strong>Search Registered Seniors by Surname:</strong>
                                    <div class="form-group">
                       <input id="searchdata" type="text" name="searchdata" required="true" placeholder="Search by SurName">
                           <button type="submit" class="bttnclick" name="search" id="submit">Search</button>
@@ -193,10 +200,17 @@ foreach($results as $row)
                             <td class="strupper"><?php echo htmlentities($row->Age);?></td>
                             <td><?php echo htmlentities($row->DateofAdmission);?></td>
                             <td align="center">
-									            <a href="search-edit-list.php?id=<?php echo htmlentities($row->ID);?>" class="btn btn-sm btn-success"><i class="fa fa-edit"></i> Edit</a>
-									            <a href="delete_employee.php?id=<?php echo htmlentities($row->ID);?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete?')"><i class="fa fa-trash"></i> Delete</a>
-								              <a href="Generate-id.php?id=<?php echo htmlentities($row->ID);?>" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i>Generate ID</a>
-                            </td>
+  <div class="dropdown">
+    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="search-edit-list.php?id=<?php echo htmlentities($row->ID);?>"><i class="fa fa-edit"></i> Edit</a>
+      <a class="dropdown-item" href="delete_employee.php?id=<?php echo htmlentities($row->ID);?>" onclick="return confirm('Are you sure you want to delete?')"><i class="fa fa-trash"></i> Delete</a>
+      <a class="dropdown-item" href="Generate-id.php?id=<?php echo htmlentities($row->ID);?>"><i class="fa fa-edit"></i> Generate ID</a>
+    </div>
+  </div>
+</td>
+
                           </tr><?php 
 $cnt=$cnt+1;
 } } else { ?>

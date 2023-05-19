@@ -90,7 +90,7 @@ if (strlen($_SESSION['sturecmsaid']==0)) {
                       <table class="table">
                         <thead>
                           <tr>
-                            <th class="font-weight-bold">No</th>
+                            <th style="text-align: center;" class="font-weight-bold">Total Senior</th>
                             <th class="font-weight-bold">Notice Title</th>
                             <th class="font-weight-bold">Barangay</th>
                             <th class="font-weight-bold">Notice Date</th>
@@ -101,13 +101,15 @@ if (strlen($_SESSION['sturecmsaid']==0)) {
                         <tbody>
 <?php
 $previousBarangay = null; // Variable to store the previous Barangay value
+$cnt = 1; // Initialize count variable
+
 if (isset($_GET['pageno'])) {
     $pageno = $_GET['pageno'];
 } else {
     $pageno = 1;
 }
 // Formula for pagination
-$no_of_records_per_page = 15;
+$no_of_records_per_page = 500;
 $offset = ($pageno - 1) * $no_of_records_per_page;
 $ret = "SELECT ID FROM tblnotice";
 $query1 = $dbh->prepare($ret);
@@ -120,14 +122,19 @@ $query = $dbh->prepare($sql);
 $query->execute();
 $results = $query->fetchAll(PDO::FETCH_OBJ);
 
-$cnt = 1;
 if ($query->rowCount() > 0) {
     foreach ($results as $row) {
         if ($previousBarangay !== $row->Barangay) { // Compare with previous Barangay value
             $previousBarangay = $row->Barangay;
+            $countQuery = "SELECT COUNT(*) AS cnt FROM tblnotice WHERE Barangay = :barangay";
+            $countStmt = $dbh->prepare($countQuery);
+            $countStmt->bindParam(':barangay', $previousBarangay, PDO::PARAM_STR);
+            $countStmt->execute();
+            $countResult = $countStmt->fetch(PDO::FETCH_ASSOC);
+            $count = $countResult['cnt'];
             ?>
             <tr>
-                <td><?php echo htmlentities($cnt); ?></td>
+                <td style="text-align: center;"><?php echo $count; ?></td>
                 <td><?php echo htmlentities($row->NoticeTitle); ?></td>
                 <td><?php echo htmlentities($row->Barangay); ?></td>
                 <td><?php echo htmlentities($row->CreationDate); ?></td>
