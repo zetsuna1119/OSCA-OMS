@@ -31,19 +31,17 @@ if (isset($_POST['submit'])) {
             $stmt = $mysqli->prepare("INSERT INTO tbl_checkbox (id, StuID, SurName, FirstName, MiddleName, Barangay, Gender, Age) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
             if ($stmt) {
-                $stmt->bind_param("isssssss", $id, $stuid, $stuname, $fname, $mname, $barangay, $gender, $age);
+                // Retrieve the values from the corresponding inputs
+                $stuid = $_POST['stuid'][$selectedId];
+                $stuname = $_POST['stuname'][$selectedId];
+                $fname = $_POST['fname'][$selectedId];
+                $mname = $_POST['mname'][$selectedId];
+                $barangay = $_POST['barangay'][$selectedId];
+                $gender = $_POST['gender'][$selectedId];
+                $age = $_POST['age'][$selectedId];
 
-                // Assign values to the variables
-                $id = $selectedId;
-                $stuid = $mysqli->real_escape_string($_POST['stuid']);
-                $stuname = $mysqli->real_escape_string($_POST['stuname']);
-                $fname = $mysqli->real_escape_string($_POST['fname']);
-                $mname = $mysqli->real_escape_string($_POST['mname']);
-                $barangay = $mysqli->real_escape_string($_POST['barangay']);
-                $gender = $mysqli->real_escape_string($_POST['gender']);
-                $age = $mysqli->real_escape_string($_POST['age']);
-
-                // Execute query
+                // Bind the parameters and execute the query
+                $stmt->bind_param("isssssss", $selectedId, $stuid, $stuname, $fname, $mname, $barangay, $gender, $age);
                 $stmt->execute();
 
                 // Check if the insertion was successful
@@ -180,33 +178,33 @@ if (isset($_POST['submit'])) {
 </div>                 -->
      <!-- Add a search form -->
      <form method="POST">
-                    <div class="table-responsive border rounded p-1">
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th class="font-weight-bold">No</th>
-                            <th class="font-weight-bold">Citizens ID</th>
-                            <th class="font-weight-bold" style="text-align: center">Citizens Name</th>
-                            <th class="font-weight-bold">Barangay</th>
-                            <th class="font-weight-bold">Gender</th>
-                            <th class="font-weight-bold">Age</th>
-                            <th class="font-weight-bold">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
+    <div class="table-responsive border rounded p-1">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="font-weight-bold">No</th>
+                    <th class="font-weight-bold">Citizens ID</th>
+                    <th class="font-weight-bold" style="text-align: center">Citizens Name</th>
+                    <th class="font-weight-bold">Barangay</th>
+                    <th class="font-weight-bold">Gender</th>
+                    <th class="font-weight-bold">Age</th>
+                    <th class="font-weight-bold">Action</th>
+                </tr>
+            </thead>
+            <tbody>
 <?php
 // Get page number
 if (isset($_GET['page_no']) && $_GET['page_no'] !== "") {
-  $page_no = $_GET['page_no'];
+    $page_no = $_GET['page_no'];
 } else {
-  $page_no = 1;
+    $page_no = 1;
 }
 
 // Get total records per page
 if (isset($_GET['show_entries']) && $_GET['show_entries'] !== "") {
-  $total_records_per_page = $_GET['show_entries'];
+    $total_records_per_page = $_GET['show_entries'];
 } else {
-  $total_records_per_page = 50; // Default value
+    $total_records_per_page = 50; // Default value
 }
 
 // Get the page offset for the limit query
@@ -238,7 +236,7 @@ if ($stmt->num_rows > 0) {
 
     while ($stmt->fetch()) {
         ?>
-        <tr>
+        <tr name="selected_ids[]">
             <td><?= $counter ?></td>
             <td><?= $stuid ?></td>
             <td class="strupper"><?= $stuname ?>, <?= $fname ?> <?= $mname ?></td>
@@ -249,19 +247,20 @@ if ($stmt->num_rows > 0) {
                 <input type="checkbox" name="selected_ids[]" value="<?= $id ?>" class="checkbox" onclick="updateSelected(this)">
             </td>
         </tr>
-    <?php
+        <?php
         $counter++;
     }
+    // Close the form tag inside the table
+    echo '<tr><td colspan="7" align="center"><button type="submit" class="btn btn-primary mr-2" name="submit">Submit</button></td></tr>';
 } else {
-    ?>
-    <tr>
-        <td colspan="8" align="center">No Senior found.</td>
-    </tr>
-<?php } ?>
+    // No records found
+    echo '<tr><td colspan="7" align="center">No records found.</td></tr>';
+}
+?>
 </tbody>
-<!-- </form> Remove this closing form tag -->
-
 </table>
+</div>
+</form>
 
 </div>
 <div>
@@ -288,11 +287,6 @@ if ($stmt->num_rows > 0) {
         <strong>Page <?= $page_no; ?> of <?= $total_no_of_pages; ?></strong>
     </div>
 </div>
-<!-- Add the form tag here -->
-<form method="POST">
-    <button type="submit" class="btn btn-primary mr-2" name="submit">Submit</button>
-</form>
-
 <script>
     function updateSelected(checkbox) {
         var selectedIds = [];
@@ -308,7 +302,7 @@ if ($stmt->num_rows > 0) {
         document.getElementsByName('selected_ids[]')[0].value = selectedIds.join(',');
     }
 </script>
-
+<!-- Add the form tag here -->
                   </div>
                 </div>
               </div>

@@ -218,9 +218,9 @@ $query->execute();
                 <?php if ($days_before_birthday >= 0): ?>
     <?php if ($days_before_birthday == 0): ?>
         <?php if ($gender == "Male"): ?>
-            <td>Today is his Birthday!</td>
+            <td style="color: red;">Today is His Birthday!</td>
         <?php elseif ($gender == "Female"): ?>
-            <td>Today is her Birthday!</td>
+            <td style="color:  red;">Today is Her Birthday!</td>
         <?php else: ?>
             <td>It's Today's Birthday!</td>
         <?php endif; ?>
