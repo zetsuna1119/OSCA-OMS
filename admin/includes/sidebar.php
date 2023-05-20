@@ -122,7 +122,7 @@ $totalpending=$query1->rowCount();
 
             <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic1">
-                <span class="menu-title">Benefits</span>
+                <span class="menu-title">Service</span>
                 <i class="icon-people menu-icon"></i>
               </a>
               <div class="collapse" id="ui-basic2">

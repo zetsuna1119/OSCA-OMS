@@ -124,7 +124,7 @@ $query->execute();
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
-                  <li class="breadcrumb-item active" aria-current="page"> Search Senior</li>
+                  <li class="breadcrumb-item active" aria-current="page"> Search Senior by Age</li>
                 </ol>
               </nav>
             </div>
@@ -134,9 +134,9 @@ $query->execute();
                   <div class="card-body">
                     <form method="post">
                                 <div class="form-group">
-                                   <strong>Search Registered Seniors by Surname:</strong>
+                                   <strong>Search Registered Seniors by Age:</strong>
                                    <div class="form-group">
-                      <input id="searchdata" type="text" name="searchdata" required="true" placeholder="Search by SurName">
+                      <input id="searchdata" type="text" name="searchdata" required="true" placeholder="Search by Age">
                           <button type="submit" class="bttnclick" name="search" id="submit">Search</button>
                       </div>
                     </div>      
@@ -180,7 +180,7 @@ $query1->execute();
 $results1=$query1->fetchAll(PDO::FETCH_OBJ);
 $total_rows=$query1->rowCount();
 $total_pages = ceil($total_rows / $no_of_records_per_page);
-$sql="SELECT * from tblsenior where tblsenior.SurName like '$sdata%'  LIMIT $offset, $no_of_records_per_page";
+$sql="SELECT * from tblsenior where tblsenior.Age like '$sdata%'  LIMIT $offset, $no_of_records_per_page";
 // $sql="SELECT tblsenior.StuID,tblsenior.ID as sid,tblsenior.StudentName,tblsenior.StudentEmail,tblsenior.DateofAdmission,tblclass.ClassName,tblclass.Section from tblsenior join tblclass on tblclass.ID=tblsenior.StudentClass where tblclass.Section like '$sdata%' LIMIT $offset, $no_of_records_per_page";
 $query = $dbh -> prepare($sql);
 $query->execute();
