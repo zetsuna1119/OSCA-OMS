@@ -5,6 +5,8 @@ include('includes/dbconnection.php');
 require 'connect.php';
 require 'config.php';
 // Database credentials
+
+// Database credentials
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -17,92 +19,59 @@ $mysqli = new mysqli($servername, $username, $password, $database);
 if ($mysqli->connect_error) {
     die("Connection failed: " . $mysqli->connect_error);
 }
+
 if (isset($_POST['submit'])) {
-  // Retrieve the selected IDs
-  if (isset($_POST['selected_ids']) && is_array($_POST['selected_ids'])) {
-    $selectedIds = $_POST['selected_ids'];
+    // Retrieve the selected IDs
+    if (isset($_POST['selected_ids']) && is_array($_POST['selected_ids'])) {
+        $selectedIds = $_POST['selected_ids'];
 
-    // Loop through the selected IDs and insert them into the database
-    foreach ($selectedIds as $selectedId) {
-      // Perform your database insertion here using prepared statements to prevent SQL injection
-      $stuid = $mysqli->real_escape_string($_POST['stuid']);
-      $stuname = $mysqli->real_escape_string($_POST['stuname']);
-      $fname = $mysqli->real_escape_string($_POST['fname']);
-      $mname = $mysqli->real_escape_string($_POST['mname']);
-      $nname = $mysqli->real_escape_string($_POST['nname']);
-      $dob = $mysqli->real_escape_string($_POST['dob']);
-      $age = $mysqli->real_escape_string($_POST['age']);
-      $gender = $mysqli->real_escape_string($_POST['gender']);
-      $religion = $mysqli->real_escape_string($_POST['religion']);
-      $pob = $mysqli->real_escape_string($_POST['pob']);
-      $connum = $mysqli->real_escape_string($_POST['connum']);
-      $stuemail = $mysqli->real_escape_string($_POST['stuemail']);
-      $cstatus = $mysqli->real_escape_string($_POST['cstatus']);
-      $paddress = $mysqli->real_escape_string($_POST['paddress']);
-      $barangay = $mysqli->real_escape_string($_POST['barangay']);
-      $eduat = $mysqli->real_escape_string($_POST['eduat']);
-      $skills = $mysqli->real_escape_string($_POST['skills']);
-      $occu = $mysqli->real_escape_string($_POST['occu']);
-      $anincome = $mysqli->real_escape_string($_POST['anincome']);
-      $nob = $mysqli->real_escape_string($_POST['nob']);
-      $fcname = $mysqli->real_escape_string($_POST['fcname']);
-      $fcrelationship = $mysqli->real_escape_string($_POST['fcrelationship']);
-      $fcage = $mysqli->real_escape_string($_POST['fcage']);
-      $fcstatus = $mysqli->real_escape_string($_POST['fcstatus']);
-      $fcoccu = $mysqli->real_escape_string($_POST['fcoccu']);
-      $fcincome = $mysqli->real_escape_string($_POST['fcincome']);
-      $altconnum = $mysqli->real_escape_string($_POST['altconnum']);
-      $pension = $mysqli->real_escape_string($_POST['pension']);
+        // Loop through the selected IDs and insert them into the database
+        foreach ($selectedIds as $selectedId) {
+            // Perform your database insertion here using prepared statements to prevent SQL injection
+            $stmt = $mysqli->prepare("INSERT INTO tbl_checkbox (id, StuID, SurName, FirstName, MiddleName, Barangay, Gender, Age) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
-      // Prepared statement
-      $stmt = $mysqli->prepare("INSERT INTO `tbl_checkbox` (`StuID`, `SurName`, `FirstName`, `MiddleName`, `NickName`, `DOB`, `Age`, `Gender`, `Religion`, `PoB`, `ContactNumber`, `CitiEmail`, `CivilStatus`, `PuAddress`, `Barangay`, `EduAt`, `Skills`, `Occupation`, `AnIncome`, `NoB`, `FcName`, `Relationship`, `FcAge`, `FcCiviStatus`, `Fcoccupation`, `FcIncome`, `AltenateNumber`, `Pension`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            if ($stmt) {
+                $stmt->bind_param("isssssss", $id, $stuid, $stuname, $fname, $mname, $barangay, $gender, $age);
 
-      // Bind params
-      $stmt->bind_param(
-        "sssssssssssssssssssssssss",
-        $stuid,
-        $stuname,
-        $fname,
-        $mname,
-        $nname,
-        $dob,
-        $age,
-        $gender,
-        $religion,
-        $pob,
-        $connum,
-        $stuemail,
-        $cstatus,
-        $paddress,
-        $barangay,
-        $eduat,
-        $skills,
-        $occu,
-        $anincome,
-        $nob,
-        $fcname,
-        $fcrelationship,
-        $fcage,
-        $fcstatus,
-        $fcoccu,
-        $fcincome,
-        $altconnum,
-        $pension
-      );
+                // Assign values to the variables
+                $id = $selectedId;
+                $stuid = $mysqli->real_escape_string($_POST['stuid']);
+                $stuname = $mysqli->real_escape_string($_POST['stuname']);
+                $fname = $mysqli->real_escape_string($_POST['fname']);
+                $mname = $mysqli->real_escape_string($_POST['mname']);
+                $barangay = $mysqli->real_escape_string($_POST['barangay']);
+                $gender = $mysqli->real_escape_string($_POST['gender']);
+                $age = $mysqli->real_escape_string($_POST['age']);
 
-      // Execute query
-      $stmt->execute();
+                // Execute query
+                $stmt->execute();
+
+                // Check if the insertion was successful
+                if ($stmt->affected_rows > 0) {
+                    // Success message
+                    echo '<script>alert("Selected items have been added to the database.")</script>';
+                } else {
+                    // Error message
+                    echo '<script>alert("Error inserting data into the database.")</script>';
+                }
+
+                // Close the statement
+                $stmt->close();
+            } else {
+                // Error message
+                echo '<script>alert("Failed to prepare the INSERT statement.")</script>';
+            }
+        }
+    } else {
+        // Error message if no items selected
+        echo '<script>alert("No items selected.")</script>';
     }
-
-    // Display a success message or redirect to another page
-    echo '<script>alert("Selected items have been added to the database.")</script>';
-  } else {
-    echo '<script>alert("No items selected.")</script>';
-  }
 } else {
+    // Error message if form not submitted
     echo '<script>alert("Form not submitted.")</script>';
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -204,13 +173,13 @@ if (isset($_POST['submit'])) {
                     <div class="d-sm-flex align-items-left mb-4">
                       <a href="add-students.php" class="btn btn-sm btn-primary"><i class="icon-plus"></i> Add New Senior</a>
                     </div>
-<div class="search-container">
+<!-- <div class="search-container">
   <form action=""  method="GET">
-    <input type="text" name="search" placeholder="Search by SurName..." required='true'>
+    <input type="text" name="search" placeholder="Search by SurName..." >
     <button  class="btn btn-sm btn-primary" type="submit">Search</button>
-</div>                
+</div>                 -->
      <!-- Add a search form -->
-     <form action="process.php" method="POST">
+     <form method="POST">
                     <div class="table-responsive border rounded p-1">
                       <table class="table">
                         <thead>
@@ -224,18 +193,19 @@ if (isset($_POST['submit'])) {
                             <th class="font-weight-bold">Action</th>
                           </tr>
                         </thead>
-                      <tbody>
+                        <tbody>
 <?php
 // Get page number
-if(isset($_GET['page_no']) && $_GET['page_no'] !==""){
+if (isset($_GET['page_no']) && $_GET['page_no'] !== "") {
   $page_no = $_GET['page_no'];
-}else{
+} else {
   $page_no = 1;
 }
+
 // Get total records per page
-if(isset($_GET['show_entries']) && $_GET['show_entries'] !== ""){
+if (isset($_GET['show_entries']) && $_GET['show_entries'] !== "") {
   $total_records_per_page = $_GET['show_entries'];
-}else{
+} else {
   $total_records_per_page = 50; // Default value
 }
 
@@ -264,63 +234,80 @@ $stmt->execute();
 $stmt->store_result();
 
 if ($stmt->num_rows > 0) {
-  $stmt->bind_result($id, $stuid, $stuname, $fname, $mname, $barangay, $gender, $age);
+    $stmt->bind_result($id, $stuid, $stuname, $fname, $mname, $barangay, $gender, $age);
 
-  while ($stmt->fetch()) {
+    while ($stmt->fetch()) {
+        ?>
+        <tr>
+            <td><?= $counter ?></td>
+            <td><?= $stuid ?></td>
+            <td class="strupper"><?= $stuname ?>, <?= $fname ?> <?= $mname ?></td>
+            <td class="strupper"><?= $barangay ?></td>
+            <td class="strupper"><?= $gender ?></td>
+            <td><?= $age ?></td>
+            <td align="center">
+                <input type="checkbox" name="selected_ids[]" value="<?= $id ?>" class="checkbox" onclick="updateSelected(this)">
+            </td>
+        </tr>
+    <?php
+        $counter++;
+    }
+} else {
     ?>
     <tr>
-      <td><?=$counter?></td>
-      <td><?=$stuid?></td>
-      <td class="strupper"><?=$stuname?>, <?=$fname?> <?=$mname?></td>
-      <td class="strupper"><?=$barangay?></td>
-      <td class="strupper"><?=$gender?></td>
-      <td><?=$age?></td>
-      <td align="center">
-      <input type="checkbox" name="selected_ids[]" value="<?= $id ?>" class="checkbox" onclick="updateSelected(this)">
-
-          </td>
+        <td colspan="8" align="center">No Senior found.</td>
     </tr>
-    <?php
-    $counter++;
-  }
-} else {
-?>
-  <tr>
-    <td colspan="8" align="center">No Senior found.</td>
-  </tr>
 <?php } ?>
 </tbody>
+<!-- </form> Remove this closing form tag -->
+
+</table>
+
+</div>
+<div>
+<nav aria-label="Page navigation example" style="margin-top: 30px;">
+        <ul class="pagination justify-content-end">
+            <li class="page-item"><a class="page-link <?= ($page_no <= 1) ? 'disabled' : ''; ?> " <?= ($page_no > 1) ? 'href=?page_no=' . $previous_page : ''; ?>>Previous</a></li>
+
+            <?php for ($counters = 1; $counters <= $total_no_of_pages; $counters++) { ?>
+
+                <?php if ($page_no !== $counters) { ?>
+
+                    <li class="page-item"><a class="page-link" href="?page_no=<?= $counters; ?>"><?= $counters; ?></a></li>
+
+                <?php } else { ?>
+
+                    <li class="page-item"><a class="page-link active"><?= $counters; ?></a></li>
+                <?php } ?>
+            <?php } ?>
+
+            <li class="page-item"><a class="page-link <?= ($page_no >= $total_no_of_pages) ? 'disabled' : ''; ?>" <?= ($page_no < $total_no_of_pages) ? 'href=?page_no=' . $next_page : ''; ?>>Next</a></li>
+        </ul>
+    </nav>
+    <div class="p-10" style="margin-top: -45px;">
+        <strong>Page <?= $page_no; ?> of <?= $total_no_of_pages; ?></strong>
+    </div>
+</div>
+<!-- Add the form tag here -->
+<form method="POST">
+    <button type="submit" class="btn btn-primary mr-2" name="submit">Submit</button>
 </form>
-                      </table>
-                     
-                    </div>
-                    <div>
-                      <nav aria-label="Page navigation example" style="margin-top: 30px;">
-  <ul class="pagination justify-content-end">
-    <li class="page-item"><a class="page-link <?= ($page_no <= 1) ? 'disabled' : ''; ?> " <?= ($page_no > 1) ? 'href=?page_no=' .$previous_page : ''; ?>>Previous</a>
-  </li>
-                
-    <?php for ($counters = 1; $counters <= $total_no_of_pages; $counters++) { ?>
 
-      <?php if($page_no !== $counters){ ?>
+<script>
+    function updateSelected(checkbox) {
+        var selectedIds = [];
 
-    <li class="page-item"><a class="page-link" href="?page_no=<?= $counters; ?>"><?= $counters; ?></a></li>
+        var checkboxes = document.getElementsByClassName('checkbox');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                selectedIds.push(checkboxes[i].value);
+            }
+        }
 
-    <?php } else { ?>
-
-      <li class="page-item"><a class="page-link active"><?= $counters; ?></a></li>
-      <?php }?>
-    <?php }?>
-
-    <li class="page-item"><a class="page-link <?= ($page_no >= $total_no_of_pages) ? 'disabled' : ''; ?>" <?= ($page_no < $total_no_of_pages) ? 'href=?page_no=' . $next_page : ''; ?>>Next</a>
-    </li>
-  </ul>
-</nav>
-<div class="p-10" style="margin-top: -45px;">
-  <strong>Page <?= $page_no;?> of <?= $total_no_of_pages; ?></strong>
-</div>
-</div>
-<button type="submit" class="btn btn-primary mr-2" name="submit">Submit</button>
+        // Update the selected_ids input value
+        document.getElementsByName('selected_ids[]')[0].value = selectedIds.join(',');
+    }
+</script>
 
                   </div>
                 </div>

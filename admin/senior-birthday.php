@@ -217,7 +217,13 @@ $query->execute();
                 <td><?= $dob ?></td>
                 <?php if ($days_before_birthday >= 0): ?>
     <?php if ($days_before_birthday == 0): ?>
-        <td><?= $days_before_birthday ?> Today's Birthday!</td>
+        <?php if ($gender == "Male"): ?>
+            <td>Today is his Birthday!</td>
+        <?php elseif ($gender == "Female"): ?>
+            <td>Today is her Birthday!</td>
+        <?php else: ?>
+            <td>It's Today's Birthday!</td>
+        <?php endif; ?>
     <?php else: ?>
         <td><?= $days_before_birthday ?> day(s) before birthday</td>
     <?php endif; ?>
