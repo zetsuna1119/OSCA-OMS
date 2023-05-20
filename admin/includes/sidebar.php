@@ -128,7 +128,7 @@ $totalpending=$query1->rowCount();
               <div class="collapse" id="ui-basic2">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item"> <a class="nav-link" href="senior-birthday.php">Who's birthday?</a></li>
-                  <!-- <li class="nav-item"> <a class="nav-link" href="checkbox_pension.php">Pension</a></li> -->
+                  <li class="nav-item"> <a class="nav-link" href="checkbox_pension.php">Pension</a></li>
                 </ul>
               </div>
             </li>

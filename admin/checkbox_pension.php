@@ -20,53 +20,28 @@ if ($mysqli->connect_error) {
     die("Connection failed: " . $mysqli->connect_error);
 }
 
-if (isset($_POST['submit'])) {
-    // Retrieve the selected IDs
-    if (isset($_POST['selected_ids']) && is_array($_POST['selected_ids'])) {
-        $selectedIds = $_POST['selected_ids'];
+// INSERT THE DATA FROM SENIOR TABLE TO TABLE PENSION
+if (isset($_POST['submit']) && isset($_POST['selected_ids'])) {
+  $selectedIds = $_POST['selected_ids']; // Retrieve the selected IDs
 
-        // Loop through the selected IDs and insert them into the database
-        foreach ($selectedIds as $selectedId) {
-            // Perform your database insertion here using prepared statements to prevent SQL injection
-            $stmt = $mysqli->prepare("INSERT INTO tbl_checkbox (id, StuID, SurName, FirstName, MiddleName, Barangay, Gender, Age) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-
-            if ($stmt) {
-                // Retrieve the values from the corresponding inputs
-                $stuid = $_POST['stuid'][$selectedId];
-                $stuname = $_POST['stuname'][$selectedId];
-                $fname = $_POST['fname'][$selectedId];
-                $mname = $_POST['mname'][$selectedId];
-                $barangay = $_POST['barangay'][$selectedId];
-                $gender = $_POST['gender'][$selectedId];
-                $age = $_POST['age'][$selectedId];
-
-                // Bind the parameters and execute the query
-                $stmt->bind_param("isssssss", $selectedId, $stuid, $stuname, $fname, $mname, $barangay, $gender, $age);
-                $stmt->execute();
-
-                // Check if the insertion was successful
-                if ($stmt->affected_rows > 0) {
-                    // Success message
-                    echo '<script>alert("Selected items have been added to the database.")</script>';
-                } else {
-                    // Error message
-                    echo '<script>alert("Error inserting data into the database.")</script>';
-                }
-
-                // Close the statement
-                $stmt->close();
-            } else {
-                // Error message
-                echo '<script>alert("Failed to prepare the INSERT statement.")</script>';
-            }
-        }
-    } else {
-        // Error message if no items selected
-        echo '<script>alert("No items selected.")</script>';
+  // Create a new table to store the copied data (if it doesn't exist)
+  $tbl_pension = "tbl_pension";
+  $createTableQuery = "CREATE TABLE IF NOT EXISTS $tbl_pension (ID INT PRIMARY KEY, StuID VARCHAR(100), SurName VARCHAR(100), FirstName VARCHAR(100), MiddleName VARCHAR(100), Barangay VARCHAR(100), Gender VARCHAR(100), Age INT)";
+  if (!$mysqli->query($createTableQuery)) {
+    echo "Error creating table: " . $mysqli->error;
+  } else {
+    // Insert the selected data into the new table
+    foreach ($selectedIds as $id) {
+      $stmt = $mysqli->prepare("INSERT INTO $tbl_pension SELECT ID, StuID, SurName, FirstName, MiddleName, Barangay, Gender, Age FROM tblsenior WHERE ID = ?");
+      $stmt->bind_param("i", $id);
+      if (!$stmt->execute()) {
+        echo "Error copying data: " . $stmt->error;
+        break;
+      }
     }
-} else {
-    // Error message if form not submitted
-    echo '<script>alert("Form not submitted.")</script>';
+
+    echo '<script>alert("Senior has been added.")</script>';
+  }
 }
 ?>
 
@@ -177,90 +152,92 @@ if (isset($_POST['submit'])) {
     <button  class="btn btn-sm btn-primary" type="submit">Search</button>
 </div>                 -->
      <!-- Add a search form -->
-     <form method="POST">
-    <div class="table-responsive border rounded p-1">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th class="font-weight-bold">No</th>
-                    <th class="font-weight-bold">Citizens ID</th>
-                    <th class="font-weight-bold" style="text-align: center">Citizens Name</th>
-                    <th class="font-weight-bold">Barangay</th>
-                    <th class="font-weight-bold">Gender</th>
-                    <th class="font-weight-bold">Age</th>
-                    <th class="font-weight-bold">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-<?php
-// Get page number
-if (isset($_GET['page_no']) && $_GET['page_no'] !== "") {
-    $page_no = $_GET['page_no'];
-} else {
-    $page_no = 1;
-}
-
-// Get total records per page
-if (isset($_GET['show_entries']) && $_GET['show_entries'] !== "") {
-    $total_records_per_page = $_GET['show_entries'];
-} else {
-    $total_records_per_page = 50; // Default value
-}
-
-// Get the page offset for the limit query
-$offset = ($page_no - 1) * $total_records_per_page;
-
-// Get previous page
-$previous_page = $page_no - 1;
-
-// Get the next page
-$next_page = $page_no + 1;
-
-// Get the total count of records
-$result_count = mysqli_query($con, "SELECT COUNT(*) as total_records FROM tblsenior");
-$records = mysqli_fetch_array($result_count);
-$total_records = $records['total_records']; // Store total records to a variable
-
-// Get total pages
-$total_no_of_pages = ceil($total_records / $total_records_per_page);
-
-$counter = 1;
-$search = isset($_GET['search']) ? $_GET['search'] : ''; // Get the search query
-
-$stmt = $mysqli->prepare("SELECT `id`, `StuID`, `SurName`, `FirstName`, `MiddleName`, `Barangay`, `Gender`, `Age` FROM `tblsenior` WHERE `SurName` LIKE '%$search%' OR `MiddleName` LIKE '%$search%' OR `FirstName` LIKE '%$search%' ORDER BY `SurName`, `FirstName`, `MiddleName` ASC LIMIT $offset, $total_records_per_page");
-$stmt->execute();
-$stmt->store_result();
-
-if ($stmt->num_rows > 0) {
-    $stmt->bind_result($id, $stuid, $stuname, $fname, $mname, $barangay, $gender, $age);
-
-    while ($stmt->fetch()) {
-        ?>
-        <tr name="selected_ids[]">
-            <td><?= $counter ?></td>
-            <td><?= $stuid ?></td>
-            <td class="strupper"><?= $stuname ?>, <?= $fname ?> <?= $mname ?></td>
-            <td class="strupper"><?= $barangay ?></td>
-            <td class="strupper"><?= $gender ?></td>
-            <td><?= $age ?></td>
-            <td align="center">
-                <input type="checkbox" name="selected_ids[]" value="<?= $id ?>" class="checkbox" onclick="updateSelected(this)">
-            </td>
+     
+     <form action="checkbox_pension.php" class="forms-sample" method="post" enctype="multipart/form-data">
+  <div class="table-responsive border rounded p-1">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="font-weight-bold">No</th>
+          <th class="font-weight-bold">Citizens ID</th>
+          <th class="font-weight-bold" style="text-align: center">Citizens Name</th>
+          <th class="font-weight-bold">Barangay</th>
+          <th class="font-weight-bold">Gender</th>
+          <th class="font-weight-bold">Age</th>
+          <th class="font-weight-bold">Action</th>
         </tr>
+      </thead>
+      <tbody>
         <?php
-        $counter++;
-    }
-    // Close the form tag inside the table
-    echo '<tr><td colspan="7" align="center"><button type="submit" class="btn btn-primary mr-2" name="submit">Submit</button></td></tr>';
-} else {
-    // No records found
-    echo '<tr><td colspan="7" align="center">No records found.</td></tr>';
-}
-?>
-</tbody>
-</table>
-</div>
+        // Get page number
+        if (isset($_GET['page_no']) && $_GET['page_no'] !== "") {
+          $page_no = $_GET['page_no'];
+        } else {
+          $page_no = 1;
+        }
+
+        // Get total records per page
+        if (isset($_GET['show_entries']) && $_GET['show_entries'] !== "") {
+          $total_records_per_page = $_GET['show_entries'];
+        } else {
+          $total_records_per_page = 50; // Default value
+        }
+
+        // Get the page offset for the limit query
+        $offset = ($page_no - 1) * $total_records_per_page;
+
+        // Get previous page
+        $previous_page = $page_no - 1;
+
+        // Get the next page
+        $next_page = $page_no + 1;
+
+        // Get the total count of records
+        $result_count = mysqli_query($con, "SELECT COUNT(*) as total_records FROM tblsenior");
+        $records = mysqli_fetch_array($result_count);
+        $total_records = $records['total_records']; // Store total records to a variable
+
+        // Get total pages
+        $total_no_of_pages = ceil($total_records / $total_records_per_page);
+
+        $counter = 1;
+        $search = isset($_GET['search']) ? $_GET['search'] : ''; // Get the search query
+
+        $stmt = $mysqli->prepare("SELECT `ID`, `StuID`, `SurName`, `FirstName`, `MiddleName`, `Barangay`, `Gender`, `Age` FROM `tblsenior` WHERE `SurName` LIKE '%$search%' OR `MiddleName` LIKE '%$search%' OR `FirstName` LIKE '%$search%' ORDER BY `SurName`, `FirstName`, `MiddleName` ASC LIMIT $offset, $total_records_per_page");
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+          $stmt->bind_result($id, $stuid, $stuname, $fname, $mname, $barangay, $gender, $age);
+
+          while ($stmt->fetch()) {
+            ?>
+            <tr>
+              <td><?= $counter ?></td>
+              <td><?= $stuid ?></td>
+              <td class="strupper"><?= $stuname ?>, <?= $fname ?> <?= $mname ?></td>
+              <td class="strupper"><?= $barangay ?></td>
+              <td class="strupper"><?= $gender ?></td>
+              <td><?= $age ?></td>
+              <td align="center">
+                <input type="checkbox" name="selected_ids[]" value="<?= $id ?>" class="checkbox" id="checkbox-<?= $id ?>">
+              </td>
+            </tr>
+            <?php
+            $counter++;
+          }
+        } else {
+          // No records found
+          echo '<tr><td colspan="7" align="center">No records found.</td></tr>';
+        }
+        ?>
+      </tbody>
+    </table>
+  </div>
+  <button type="submit" class="btn btn-primary mr-2" name="submit">Add</button>
+  <div id="selectedIds"></div>
 </form>
+
 
 </div>
 <div>
@@ -287,21 +264,6 @@ if ($stmt->num_rows > 0) {
         <strong>Page <?= $page_no; ?> of <?= $total_no_of_pages; ?></strong>
     </div>
 </div>
-<script>
-    function updateSelected(checkbox) {
-        var selectedIds = [];
-
-        var checkboxes = document.getElementsByClassName('checkbox');
-        for (var i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].checked) {
-                selectedIds.push(checkboxes[i].value);
-            }
-        }
-
-        // Update the selected_ids input value
-        document.getElementsByName('selected_ids[]')[0].value = selectedIds.join(',');
-    }
-</script>
 <!-- Add the form tag here -->
                   </div>
                 </div>
@@ -334,5 +296,26 @@ if ($stmt->num_rows > 0) {
     <!-- Custom js for this page -->
     <script src="./js/dashboard.js"></script>
     <!-- End custom js for this page -->
+
+    <script>
+    function updateSelected(checkbox) {
+        var selectedIds = document.getElementById("selectedIds");
+        if (checkbox.checked) {
+            var newInput = document.createElement("input");
+            newInput.type = "hidden";
+            newInput.name = "selected_ids[]";
+            newInput.value = checkbox.value;
+            newInput.id = "selected_" + checkbox.value;
+            selectedIds.appendChild(newInput);
+        } else {
+            var selectedInput = document.getElementById("selected_" + checkbox.value);
+            if (selectedInput) {
+                selectedIds.removeChild(selectedInput);
+            }
+        }
+    }
+</script>
+
+
   </body>
 </html><?php  ?>
