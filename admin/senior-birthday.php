@@ -123,6 +123,13 @@ $query->execute();
     border: 1px solid #1fd655;
     border-radius: 5px;
   }
+.dropdown-item:focus, .dropdown-item:hover {
+  background-color: #1fd655;
+}
+.dropdown-item {
+  background-color: skyblue;
+}
+  
 </style>
 
         <div class="main-panel">
@@ -152,7 +159,7 @@ $query->execute();
                             <th class="font-weight-bold">Gender</th>
                             <th class="font-weight-bold">Age</th>
                             <th class="font-weight-bold">Date of Birth</th>
-                            <th class="font-weight-bold" style="text-align: center">Status</th>
+                            <th class="font-weight-bold">Remaining Days</th>
                             <th class="font-weight-bold">Action</th>
                           </tr>
                         </thead>
@@ -169,7 +176,7 @@ $query->execute();
     }
 
     // Total rows or records to display
-    $total_records_per_page = 30;
+    $total_records_per_page = 40;
 
     // Get the page offset for the limit query
     $offset = ($page_no - 1) * $total_records_per_page;
@@ -219,12 +226,16 @@ $query->execute();
 <?php endif; ?>
 
                 <td align="center">
-                    <a href="edit-ol-reg-pending.php?id=<?= $id ?>" class="btn btn-sm btn-success"><i
-                                class="fa fa-edit"></i>Edit</a>
-                    <a href="delete_olreg_senior.php?id=<?= $id ?>" class="btn btn-sm btn-danger"
-                       onclick="return confirm('Are you sure you want to delete?')"><i class="fa fa-trash"></i>
-                        Delete</a>
-                </td>
+  <div class="dropdown">
+    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="edit-senior.php?id=<?=$id?>"><i class="fa fa-edit"></i> Edit</a>
+      <a class="dropdown-item" href="delete_employee.php?id=<?=$id?>" onclick="return confirm('Are you sure you want to delete?')"><i class="fa fa-trash"></i> Delete</a>
+      <a class="dropdown-item" href="Generate-id.php?id=<?=$id?>"><i class="fa fa-edit"></i> Generate ID</a>
+    </div>
+  </div>
+</td>
             </tr>
             <?php
             $counter++;
@@ -239,7 +250,8 @@ $query->execute();
     ?>
 </tbody>
 
-                      </table>
+                      
+</table>
                     </div>
                     <div>
                       <nav aria-label="Page navigation example" style="margin-top: 30px;">
@@ -266,9 +278,7 @@ $query->execute();
 <div class="p-10" style="margin-top: -45px;">
   <strong>Page <?= $page_no;?> of <?= $total_no_of_pages; ?></strong>
 </div>
-
-        
-                    
+</div>
                   </div>
                 </div>
               </div>
