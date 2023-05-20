@@ -21,6 +21,30 @@ if ($mysqli->connect_error) {
 }
 
 // INSERT THE DATA FROM SENIOR TABLE TO TABLE PENSION
+// if (isset($_POST['submit']) && isset($_POST['selected_ids'])) {
+//   $selectedIds = $_POST['selected_ids']; // Retrieve the selected IDs
+
+//   // Create a new table to store the copied data (if it doesn't exist)
+//   $tbl_pension = "tbl_pension";
+//   $createTableQuery = "CREATE TABLE IF NOT EXISTS $tbl_pension (ID INT PRIMARY KEY, StuID VARCHAR(100), SurName VARCHAR(100), FirstName VARCHAR(100), MiddleName VARCHAR(100), Barangay VARCHAR(100), Gender VARCHAR(100), Age INT)";
+//   if (!$mysqli->query($createTableQuery)) {
+//     echo "Error creating table: " . $mysqli->error;
+//   } else {
+//     // Insert the selected data into the new table
+//     foreach ($selectedIds as $id) {
+//       $stmt = $mysqli->prepare("INSERT INTO $tbl_pension SELECT ID, StuID, SurName, FirstName, MiddleName, Barangay, Gender, Age FROM tblsenior WHERE ID = ?");
+//       $stmt->bind_param("i", $id);
+//       if (!$stmt->execute()) {
+//         echo "Error copying data: " . $stmt->error;
+//         break;
+//       }
+//     }
+
+//     echo '<script>alert("Senior has been added.")</script>';
+//   }
+// }
+
+// INSERT THE DATA FROM SENIOR TABLE TO TABLE PENSION
 if (isset($_POST['submit']) && isset($_POST['selected_ids'])) {
   $selectedIds = $_POST['selected_ids']; // Retrieve the selected IDs
 
@@ -32,10 +56,24 @@ if (isset($_POST['submit']) && isset($_POST['selected_ids'])) {
   } else {
     // Insert the selected data into the new table
     foreach ($selectedIds as $id) {
-      $stmt = $mysqli->prepare("INSERT INTO $tbl_pension SELECT ID, StuID, SurName, FirstName, MiddleName, Barangay, Gender, Age FROM tblsenior WHERE ID = ?");
-      $stmt->bind_param("i", $id);
-      if (!$stmt->execute()) {
-        echo "Error copying data: " . $stmt->error;
+      // Check if the record already exists in the tbl_pension table
+      $checkExistenceQuery = "SELECT ID FROM $tbl_pension WHERE ID = ?";
+      $stmtCheck = $mysqli->prepare($checkExistenceQuery);
+      $stmtCheck->bind_param("i", $id);
+      $stmtCheck->execute();
+      $stmtCheck->store_result();
+      
+      if ($stmtCheck->num_rows > 0) {
+        // echo "Record with ID $id already exists in tbl_pension.";
+        echo '<script>alert("Record Senior already exists!")</script>';
+        continue; // Skip inserting this record and move to the next iteration
+      }
+
+      // Insert the selected data into the new table
+      $stmtInsert = $mysqli->prepare("INSERT INTO $tbl_pension SELECT ID, StuID, SurName, FirstName, MiddleName, Barangay, Gender, Age FROM tblsenior WHERE ID = ?");
+      $stmtInsert->bind_param("i", $id);
+      if (!$stmtInsert->execute()) {
+        echo "Error copying data: " . $stmtInsert->error;
         break;
       }
     }
@@ -43,6 +81,7 @@ if (isset($_POST['submit']) && isset($_POST['selected_ids'])) {
     echo '<script>alert("Senior has been added.")</script>';
   }
 }
+
 ?>
 
 <!DOCTYPE html>
