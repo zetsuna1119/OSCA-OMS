@@ -19,6 +19,29 @@ $mysqli = new mysqli($servername, $username, $password, $database);
 if ($mysqli->connect_error) {
     die("Connection failed: " . $mysqli->connect_error);
 }
+// INSERT THE DATA FROM SENIOR TABLE TO TABLE PENSION
+if (isset($_POST['submit']) && isset($_POST['selected_ids'])) {
+  $selectedIds = $_POST['selected_ids']; // Retrieve the selected IDs
+
+  // Create a new table to store the copied data (if it doesn't exist)
+  $tbl_pension = "tbl_pension";
+  $createTableQuery = "CREATE TABLE IF NOT EXISTS $tbl_pension SELECT *, NOW() AS CreationDate FROM tblsenior WHERE 1=0";
+  if (!$mysqli->query($createTableQuery)) {
+    echo "Error creating table: " . $mysqli->error;
+  } else {
+    // Insert the selected data into the new table
+    foreach ($selectedIds as $id) {
+      $stmt = $mysqli->prepare("INSERT INTO $tbl_pension SELECT *, NOW() AS CreationDate FROM tblsenior WHERE ID = ?");
+      $stmt->bind_param("i", $id);
+      if (!$stmt->execute()) {
+        echo "Error copying data: " . $stmt->error;
+        break;
+      }
+    }
+
+    echo '<script>alert("Senior has been added.")</script>';
+  }
+}
 
 // INSERT THE DATA FROM SENIOR TABLE TO TABLE PENSION
 // if (isset($_POST['submit']) && isset($_POST['selected_ids'])) {
@@ -32,10 +55,24 @@ if ($mysqli->connect_error) {
 //   } else {
 //     // Insert the selected data into the new table
 //     foreach ($selectedIds as $id) {
-//       $stmt = $mysqli->prepare("INSERT INTO $tbl_pension SELECT ID, StuID, SurName, FirstName, MiddleName, Barangay, Gender, Age FROM tblsenior WHERE ID = ?");
-//       $stmt->bind_param("i", $id);
-//       if (!$stmt->execute()) {
-//         echo "Error copying data: " . $stmt->error;
+//       // Check if the record already exists in the tbl_pension table
+//       $checkExistenceQuery = "SELECT ID FROM $tbl_pension WHERE ID = ?";
+//       $stmtCheck = $mysqli->prepare($checkExistenceQuery);
+//       $stmtCheck->bind_param("i", $id);
+//       $stmtCheck->execute();
+//       $stmtCheck->store_result();
+      
+//       if ($stmtCheck->num_rows > 0) {
+//         // echo "Record with ID $id already exists in tbl_pension.";
+//         echo '<script>alert("Record Senior already exists!")</script>';
+//         continue; // Skip inserting this record and move to the next iteration
+//       }
+
+//       // Insert the selected data into the new table
+//       $stmtInsert = $mysqli->prepare("INSERT INTO $tbl_pension SELECT ID, StuID, SurName, FirstName, MiddleName, Barangay, Gender, Age FROM tblsenior WHERE ID = ?");
+//       $stmtInsert->bind_param("i", $id);
+//       if (!$stmtInsert->execute()) {
+//         echo "Error copying data: " . $stmtInsert->error;
 //         break;
 //       }
 //     }
@@ -43,44 +80,6 @@ if ($mysqli->connect_error) {
 //     echo '<script>alert("Senior has been added.")</script>';
 //   }
 // }
-
-// INSERT THE DATA FROM SENIOR TABLE TO TABLE PENSION
-if (isset($_POST['submit']) && isset($_POST['selected_ids'])) {
-  $selectedIds = $_POST['selected_ids']; // Retrieve the selected IDs
-
-  // Create a new table to store the copied data (if it doesn't exist)
-  $tbl_pension = "tbl_pension";
-  $createTableQuery = "CREATE TABLE IF NOT EXISTS $tbl_pension (ID INT PRIMARY KEY, StuID VARCHAR(100), SurName VARCHAR(100), FirstName VARCHAR(100), MiddleName VARCHAR(100), Barangay VARCHAR(100), Gender VARCHAR(100), Age INT)";
-  if (!$mysqli->query($createTableQuery)) {
-    echo "Error creating table: " . $mysqli->error;
-  } else {
-    // Insert the selected data into the new table
-    foreach ($selectedIds as $id) {
-      // Check if the record already exists in the tbl_pension table
-      $checkExistenceQuery = "SELECT ID FROM $tbl_pension WHERE ID = ?";
-      $stmtCheck = $mysqli->prepare($checkExistenceQuery);
-      $stmtCheck->bind_param("i", $id);
-      $stmtCheck->execute();
-      $stmtCheck->store_result();
-      
-      if ($stmtCheck->num_rows > 0) {
-        // echo "Record with ID $id already exists in tbl_pension.";
-        echo '<script>alert("Record Senior already exists!")</script>';
-        continue; // Skip inserting this record and move to the next iteration
-      }
-
-      // Insert the selected data into the new table
-      $stmtInsert = $mysqli->prepare("INSERT INTO $tbl_pension SELECT ID, StuID, SurName, FirstName, MiddleName, Barangay, Gender, Age FROM tblsenior WHERE ID = ?");
-      $stmtInsert->bind_param("i", $id);
-      if (!$stmtInsert->execute()) {
-        echo "Error copying data: " . $stmtInsert->error;
-        break;
-      }
-    }
-
-    echo '<script>alert("Senior has been added.")</script>';
-  }
-}
 
 ?>
 
@@ -170,11 +169,11 @@ if (isset($_POST['submit']) && isset($_POST['selected_ids'])) {
         <div class="main-panel">
           <div class="content-wrapper">
              <div class="page-header">
-              <h3 class="page-title"> Manage Seniors List </h3>
+              <h3 class="page-title"> Manage Pension</h3>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
-                  <li class="breadcrumb-item active" aria-current="page"> Manage Seniors </li>
+                  <li class="breadcrumb-item active" aria-current="page"> Manage Pension </li>
                 </ol>
               </nav>
             </div>
@@ -183,7 +182,7 @@ if (isset($_POST['submit']) && isset($_POST['selected_ids'])) {
                 <div class="card">
                   <div class="card-body">
                     <div class="d-sm-flex align-items-left mb-4">
-                      <a href="add-students.php" class="btn btn-sm btn-primary"><i class="icon-plus"></i> Add New Senior</a>
+                    <li class="breadcrumb-item active" aria-current="page"> Manage Pension </li>
                     </div>
 <!-- <div class="search-container">
   <form action=""  method="GET">
@@ -194,91 +193,91 @@ if (isset($_POST['submit']) && isset($_POST['selected_ids'])) {
      
      <form action="checkbox_pension.php" class="forms-sample" method="post" enctype="multipart/form-data">
   <div class="table-responsive border rounded p-1">
-    <table class="table">
-      <thead>
-        <tr>
-          <th class="font-weight-bold">No</th>
-          <th class="font-weight-bold">Citizens ID</th>
-          <th class="font-weight-bold" style="text-align: center">Citizens Name</th>
-          <th class="font-weight-bold">Barangay</th>
-          <th class="font-weight-bold">Gender</th>
-          <th class="font-weight-bold">Age</th>
-          <th class="font-weight-bold">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php
-        // Get page number
-        if (isset($_GET['page_no']) && $_GET['page_no'] !== "") {
-          $page_no = $_GET['page_no'];
-        } else {
-          $page_no = 1;
-        }
+  <table class="table">
+  <thead>
+    <tr>
+      <th class="font-weight-bold">No</th>
+      <th class="font-weight-bold">Citizens ID</th>
+      <th class="font-weight-bold" style="text-align: center">Citizens Name</th>
+      <th class="font-weight-bold">Barangay</th>
+      <th class="font-weight-bold">Gender</th>
+      <th class="font-weight-bold">Age</th>
+      <th class="font-weight-bold">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+    // Get page number
+    if (isset($_GET['page_no']) && $_GET['page_no'] !== "") {
+      $page_no = $_GET['page_no'];
+    } else {
+      $page_no = 1;
+    }
 
-        // Get total records per page
-        if (isset($_GET['show_entries']) && $_GET['show_entries'] !== "") {
-          $total_records_per_page = $_GET['show_entries'];
-        } else {
-          $total_records_per_page = 50; // Default value
-        }
+    // Get total records per page
+    if (isset($_GET['show_entries']) && $_GET['show_entries'] !== "") {
+      $total_records_per_page = $_GET['show_entries'];
+    } else {
+      $total_records_per_page = 50; // Default value
+    }
 
-        // Get the page offset for the limit query
-        $offset = ($page_no - 1) * $total_records_per_page;
+    // Get the page offset for the limit query
+    $offset = ($page_no - 1) * $total_records_per_page;
 
-        // Get previous page
-        $previous_page = $page_no - 1;
+    // Get previous page
+    $previous_page = $page_no - 1;
 
-        // Get the next page
-        $next_page = $page_no + 1;
+    // Get the next page
+    $next_page = $page_no + 1;
 
-        // Get the total count of records
-        $result_count = mysqli_query($con, "SELECT COUNT(*) as total_records FROM tblsenior");
-        $records = mysqli_fetch_array($result_count);
-        $total_records = $records['total_records']; // Store total records to a variable
+    // Get the total count of records
+    $result_count = mysqli_query($con, "SELECT COUNT(*) as total_records FROM tblsenior");
+    $records = mysqli_fetch_array($result_count);
+    $total_records = $records['total_records']; // Store total records to a variable
 
-        // Get total pages
-        $total_no_of_pages = ceil($total_records / $total_records_per_page);
+    // Get total pages
+    $total_no_of_pages = ceil($total_records / $total_records_per_page);
 
-        $counter = 1;
-        $search = isset($_GET['search']) ? $_GET['search'] : ''; // Get the search query
+    $counter = 1;
+    $search = isset($_GET['search']) ? $_GET['search'] : ''; // Get the search query
 
-        $stmt = $mysqli->prepare("SELECT `ID`, `StuID`, `SurName`, `FirstName`, `MiddleName`, `Barangay`, `Gender`, `Age` FROM `tblsenior` WHERE `SurName` LIKE '%$search%' OR `MiddleName` LIKE '%$search%' OR `FirstName` LIKE '%$search%' ORDER BY `SurName`, `FirstName`, `MiddleName` ASC LIMIT $offset, $total_records_per_page");
-        $stmt->execute();
-        $stmt->store_result();
+    $stmt = $mysqli->prepare("SELECT `ID`, `StuID`, `SurName`, `FirstName`, `MiddleName`, `Barangay`, `Gender`, `Age` FROM `tblsenior` WHERE `SurName` LIKE ? OR `MiddleName` LIKE ? OR `FirstName` LIKE ? ORDER BY `SurName`, `FirstName`, `MiddleName` ASC LIMIT ?, ?");
+    $searchParam = "%$search%"; // Add wildcard to the search query
+    $stmt->bind_param("sssii", $searchParam, $searchParam, $searchParam, $offset, $total_records_per_page);
+    $stmt->execute();
+    $stmt->store_result();
 
-        if ($stmt->num_rows > 0) {
-          $stmt->bind_result($id, $stuid, $stuname, $fname, $mname, $barangay, $gender, $age);
+    if ($stmt->num_rows > 0) {
+      $stmt->bind_result($id, $stuid, $stuname, $fname, $mname, $barangay, $gender, $age);
 
-          while ($stmt->fetch()) {
-            ?>
-            <tr>
-              <td><?= $counter ?></td>
-              <td><?= $stuid ?></td>
-              <td class="strupper"><?= $stuname ?>, <?= $fname ?> <?= $mname ?></td>
-              <td class="strupper"><?= $barangay ?></td>
-              <td class="strupper"><?= $gender ?></td>
-              <td><?= $age ?></td>
-              <td align="center">
-                <input type="checkbox" name="selected_ids[]" value="<?= $id ?>" class="checkbox" id="checkbox-<?= $id ?>">
-              </td>
-            </tr>
-            <?php
-            $counter++;
-          }
-        } else {
-          // No records found
-          echo '<tr><td colspan="7" align="center">No records found.</td></tr>';
-        }
+      while ($stmt->fetch()) {
         ?>
-      </tbody>
-    </table>
-  </div>
-  <button type="submit" class="btn btn-primary mr-2" name="submit">Add</button>
-  <div id="selectedIds"></div>
+        <tr>
+          <td><?= $counter ?></td>
+          <td><?= $stuid ?></td>
+          <td class="strupper"><?= $stuname ?>, <?= $fname ?> <?= $mname ?></td>
+          <td class="strupper"><?= $barangay ?></td>
+          <td class="strupper"><?= $gender ?></td>
+          <td><?= $age ?></td>
+          <td align="center">
+            <input type="checkbox" name="selected_ids[]" value="<?= $id ?>" class="checkbox" id="checkbox-<?= $id ?>">
+          </td>
+        </tr>
+        <?php
+        $counter++;
+      }
+    } else {
+      // No records found
+      echo '<tr><td colspan="7" align="center">No records found.</td></tr>';
+    }
+    ?>
+  </tbody>
+</table>
+<button type="submit" class="btn btn-primary mr-2" name="submit">Add</button>
+<div id="selectedIds"></div>
 </form>
 
 
-</div>
 <div>
 <nav aria-label="Page navigation example" style="margin-top: 30px;">
         <ul class="pagination justify-content-end">
@@ -335,24 +334,13 @@ if (isset($_POST['submit']) && isset($_POST['selected_ids'])) {
     <!-- Custom js for this page -->
     <script src="./js/dashboard.js"></script>
     <!-- End custom js for this page -->
-
     <script>
-    function updateSelected(checkbox) {
-        var selectedIds = document.getElementById("selectedIds");
-        if (checkbox.checked) {
-            var newInput = document.createElement("input");
-            newInput.type = "hidden";
-            newInput.name = "selected_ids[]";
-            newInput.value = checkbox.value;
-            newInput.id = "selected_" + checkbox.value;
-            selectedIds.appendChild(newInput);
-        } else {
-            var selectedInput = document.getElementById("selected_" + checkbox.value);
-            if (selectedInput) {
-                selectedIds.removeChild(selectedInput);
-            }
-        }
-    }
+  // Add event listener to the filter input field
+  document.getElementById('filter').addEventListener('input', function(event) {
+    var selectedValue = event.target.value;
+    // Redirect to the updated URL with the selected filter value
+    window.location.href = '?page_no=<?= $page_no ?>&filter=' + selectedValue;
+  });
 </script>
 
 
