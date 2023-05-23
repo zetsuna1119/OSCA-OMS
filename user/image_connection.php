@@ -27,5 +27,3 @@ if(isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
       }
   }
 }
-
-?>

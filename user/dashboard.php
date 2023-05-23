@@ -1,19 +1,18 @@
-
-
 <?php
 session_start();
 //error_reporting(0);
 include('includes/dbconnection.php');
-if (strlen($_SESSION['sturecmsstuid']==0)) {
+if (strlen($_SESSION['sturecmsstuid'] == 0)) {
   header('location:logout.php');
-  } else{
-   
-  ?>
-<!DOCTYPE html>
-<html lang="en">
+} else {
+
+?>
+  <!DOCTYPE html>
+  <html lang="en">
+
   <head>
-   
-    <title>Student  Management System|||Dashboard</title>
+
+    <title>Student Management System|||Dashboard</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="vendors/simple-line-icons/css/simple-line-icons.css">
     <link rel="stylesheet" href="vendors/flag-icon-css/css/flag-icon.min.css">
@@ -28,16 +27,17 @@ if (strlen($_SESSION['sturecmsstuid']==0)) {
     <!-- Layout styles -->
     <link rel="stylesheet" href="./css/style.css">
     <!-- End layout styles -->
-   
+
   </head>
+
   <body>
     <div class="container-scroller">
       <!-- partial:partials/_navbar.html -->
-     <?php include_once('includes/header.php');?>
+      <?php include_once('includes/header.php'); ?>
       <!-- partial -->
       <div class="container-fluid page-body-wrapper">
         <!-- partial:partials/_sidebar.html -->
-        <?php include_once('includes/sidebar.php');?>
+        <?php include_once('includes/sidebar.php'); ?>
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
@@ -47,7 +47,7 @@ if (strlen($_SESSION['sturecmsstuid']==0)) {
                   <span class="card-body d-lg-flex align-items-center">
                     <p class="mb-lg-0">Notices from the Office kindly check! </p>
                     <a href="view-notice.php" target="_blank" class="btn btn-warning purchase-button btn-sm my-1 my-sm-0 ml-auto">View Notice</a>
-                  
+
                   </span>
                 </div>
               </div>
@@ -55,7 +55,7 @@ if (strlen($_SESSION['sturecmsstuid']==0)) {
           </div>
           <!-- content-wrapper ends -->
           <!-- partial:partials/_footer.html -->
-         <?php include_once('includes/footer.php');?>
+          <?php include_once('includes/footer.php'); ?>
           <!-- partial -->
         </div>
         <!-- main-panel ends -->
@@ -80,4 +80,5 @@ if (strlen($_SESSION['sturecmsstuid']==0)) {
     <script src="./js/dashboard.js"></script>
     <!-- End custom js for this page -->
   </body>
-</html><?php }  ?>
+
+  </html><?php }  ?>
